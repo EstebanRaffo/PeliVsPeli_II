@@ -84,14 +84,49 @@ function obtenerCompetencias(req, res) {
             console.log("Hubo un error en la consulta", error.message);
             return res.status(404).send("Hubo un error en la consulta");
         }
-        // var respuesta = {
-        //     'competencias': resultado
-        // };
-        console.log(resultado)    
-        res.send(JSON.stringify(resultado));
+        
+        res.json(resultado);
     });
 }
 
+
+function obtenerOpciones(req, res) {
+    var idCompetencia = req.params.id;
+
+    var sql = "select * from competencia";
+    
+    con.query(sql, function(error, resultado, fields) {
+        if (error) {
+            console.log("Hubo un error en la consulta", error.message);
+            return res.status(404).send("Hubo un error en la consulta");
+        }
+
+        var resultado_desordenado = desordenarArray(resultado);
+        var par = resultado_desordenado.splice(2);
+
+        var opciones = {
+            'competencia': par.competencia,
+            'peliculas': par
+        }
+        
+        res.json(opciones);
+    });
+}
+
+//esta funcion se encarga de desordenar un array
+function desordenarArray(array) {
+
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+}
+
+
 module.exports = {
-    obtenerCompetencias: obtenerCompetencias
+    obtenerCompetencias: obtenerCompetencias,
+    obtenerOpciones: obtenerOpciones
 };

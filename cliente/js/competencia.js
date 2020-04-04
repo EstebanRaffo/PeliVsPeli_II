@@ -1,5 +1,6 @@
 // Esta es la ip y puerto en que necesitamos que esté el backend disponible
-var server = 'http://0.0.0.0:8080';
+var server = 'http://localhost:8080';
+
 
 function CompetenciasController () {
 
@@ -17,9 +18,9 @@ function CompetenciasController () {
 
 	this.cargarCompetencias = function (data){
 		// data es el listado de competencias que retornó la api (un objeto json)
-
 		// Oculto la plantilla
 		$(".competenciaPlantilla").hide();
+		
 		// Se recorren iterativamente, uno a uno, los resultados de competencias
 		var cantidad = data.length;
 		var idColor = 1;
@@ -76,6 +77,7 @@ function CompetenciasController () {
 
 	// Esta método obtiene y carga las opciones de películas para votar
 	this.obtenerOpciones =  function (id){
+		// id: parámetro en la url que corresponde al identificador de esa competencia
 		// Como luego se necesita usar "this" dentro de la función de callback, se guarda en self la referencia a CompetenciasController
 		var self = this;
 		// Se obtienen de la api las opciones de películas
@@ -85,6 +87,7 @@ function CompetenciasController () {
 	    	self.cargarOpciones(id, data);
 	    });
 	},
+	
 	this.cargarOpciones = function (id, opciones){
 		// Se carga el nombre de la competencia en el título de la página
 		$("#nombreCompetencia").text(opciones.competencia);

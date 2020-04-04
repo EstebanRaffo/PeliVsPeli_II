@@ -16,9 +16,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.get('/competencias', competenciasController.obtenerCompetencias);
-// app.get('/generos', controladorPeliculas.buscarGeneros);
-// app.get('/peliculas/:id', controladorInformacionDePelicula.buscarPelicula);
-// app.get('/peliculas/recomendacion', controladorRecomendaciones.recomendarPeliculas);
+app.get('/competencias/:id/peliculas', competenciasController.obtenerOpciones);
 
 //seteamos el puerto en el cual va a escuchar los pedidos la aplicación
 var puerto = '8080';
@@ -26,4 +24,3 @@ var puerto = '8080';
 app.listen(puerto, function () {
   console.log( "Escuchando en el puerto " + puerto );
 });
-
