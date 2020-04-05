@@ -1,88 +1,13 @@
 var con = require('../lib/conexionbd');
 
-// function buscarPeliculas(req, res) {
-// // Request URL: http://localhost:8080/peliculas?pagina=1&titulo=harry&genero=1&anio=2000&cantidad=52&columna_orden=titulo&tipo_orden=ASC
-    
-//     var titulo = req.query.titulo;
-//     var anio = req.query.anio;
-//     var genero = req.query.genero;
-    
-//     var columna_orden = req.query.columna_orden;
-//     var tipo_orden = req.query.tipo_orden;
-//     var pagina = req.query.pagina;
-//     var cantidadPorPagina = req.query.cantidad;
-    
-
-//     if(titulo && anio && genero){
-//         var sql = "select * from pelicula where titulo like '" + '%' + titulo + '%' + "'" + ' and ' + 'anio = ' + anio + ' and ' + 'genero_id = ' + genero + ' order by ' + columna_orden + ' ' + tipo_orden;
-//     }
-//     else{
-//         if(titulo && anio || titulo && genero || anio && genero){
-//             if(titulo && anio){
-//                 var sql = "select * from pelicula where titulo like '" + '%' + titulo + '%' + "'" + ' and ' + 'anio = ' + anio + ' order by ' + columna_orden + ' ' + tipo_orden;
-//             }
-            
-//             if(titulo && genero){
-//                 var sql = "select * from pelicula where titulo like '" + '%' + titulo + '%' + "'" + ' and ' + 'genero_id = ' + genero + ' order by ' + columna_orden + ' ' + tipo_orden;
-//             }
-    
-//             if(anio && genero){
-//                 var sql = "select * from pelicula where anio = " + anio + " and " + 'genero_id = ' + genero + ' order by ' + columna_orden + ' ' + tipo_orden;
-//             }
-//         }
-//         else{
-//             if(titulo || anio || genero){
-//                 if(titulo){
-//                     var sql = "select * from pelicula where titulo like '" + '%' + titulo + '%' + "'" + ' order by ' + columna_orden + ' ' + tipo_orden;
-//                 }
-//                 if(anio){
-//                     var sql = "select * from pelicula where anio = " + anio + ' order by ' + columna_orden + ' ' + tipo_orden;
-//                 }
-//                 if(genero){
-//                     var sql = "select * from pelicula where genero_id = " + genero + ' order by ' + columna_orden + ' ' + tipo_orden;
-//                 }
-//             }
-//             else{
-//                 var sql = "select * from pelicula order by " + columna_orden + ' ' + tipo_orden + ' limit ' + cantidadPorPagina * (pagina - 1) + ',' + cantidadPorPagina;
-//             }
-//         }
-//     }
-
-    
-//     // la funcion de callback se ejecuta una vez que se termine de ejecutar la consulta
-//     con.query(sql, function(error, resultado, fields) {
-//         if (error) {
-//             console.log("Hubo un error en la consulta", error.message);
-//             return res.status(404).send("Hubo un error en la consulta");
-//         }
-    
-//         var respuesta = {
-//             'peliculas': resultado
-//         };
-
-//         var sqlCount = "select COUNT(*) as cantidad from pelicula";
-
-//         con.query(sqlCount, function(error, resultado) {
-//             if (error) {
-//                 console.log("Hubo un error al calcular la cantidad", error.message);
-//                 return res.status(404).send("Hubo un error al calcular la cantidad");
-//             }  
-            
-//             respuesta.total = resultado[0].cantidad;
-            
-//             res.send(JSON.stringify(respuesta));
-//         });
-//     });   
-// }
-
 
 function obtenerCompetencias(req, res) {
     var sql = "select * from competencia";
     
     con.query(sql, function(error, resultado, fields) {
         if (error) {
-            console.log("Hubo un error en la consulta", error.message);
-            return res.status(404).send("Hubo un error en la consulta");
+            console.log("Hubo un error en la consulta de competencias", error.message);
+            return res.status(404).send("Hubo un error en la consulta de competencias");
         }
         
         res.json(resultado);
@@ -93,29 +18,87 @@ function obtenerCompetencias(req, res) {
 function obtenerOpciones(req, res) {
     var idCompetencia = req.params.id;
 
-    var sql = "select * from competencia";
-    
-    con.query(sql, function(error, resultado, fields) {
-        if (error) {
-            console.log("Hubo un error en la consulta", error.message);
-            return res.status(404).send("Hubo un error en la consulta");
+    existeCompetencia(idCompetencia, (existeId) => {    
+        if(!existeId){
+            return res.status(404).send("El id de la competencia es inexistente");
         }
+        else{
+            switch(idCompetencia){
+                case '1':
+                    var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C WHERE P.genero_id = 8 AND C.id = 1';
+                    break;
+                case '2':
+                    var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C WHERE P.genero_id = 5 AND C.id = 2';
+                    break;
+                case '3':
+                    var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C, actor_pelicula AP WHERE AP.pelicula_id = P.id AND AP.actor_id = 269 AND C.id = 3';        
+                    break;
+                case '4':
+                    var sql = 'SELECT C.nombre AS competencia, P.* from pelicula P, competencia C, actor_pelicula AP WHERE AP.pelicula_id = P.id AND AP.actor_id = 13 AND C.id = 4';
+                    break;
+                case '5':
+                    var sql = 'SELECT C.nombre AS competencia, P.* from pelicula P, competencia C, director_pelicula DP WHERE DP.pelicula_id = P.id and DP.director_id = 3279 AND C.id = 5';
+                    break;
+                case '6':
+                    var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C, actor_pelicula AP WHERE AP.pelicula_id = P.id AND AP.actor_id = 1203 AND C.id = 6';            
+                    break;
+                case '7':
+                    var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C WHERE P.genero_id = 10 AND C.id = 7';
+                    break;
+                case '8':
+                    var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C WHERE P.genero_id = 7 AND C.id = 8';
+                    break;
+            }
+    
+            con.query(sql, function(error, resultado, fields) {
+                if (error) {
+                    console.log("Hubo un error en la consulta de opciones", error.message);
+                    return res.status(404).send("Hubo un error en la consulta de opciones");
+                }
+                
+                var resultado_desordenado = desordenarArray(resultado);
+                resultado_desordenado.splice(2);
+        
+                var opciones = {
+                    'competencia': resultado_desordenado[0].competencia,
+                    'peliculas': resultado_desordenado
+                }
+                
+                res.json(opciones);
+            });
+        }
+    });
 
-        var resultado_desordenado = desordenarArray(resultado);
-        var par = resultado_desordenado.splice(2);
+}
 
-        var opciones = {
-            'competencia': par.competencia,
-            'peliculas': par
+function existeCompetencia(idCompetencia, callback){
+    var sql = 'SELECT * FROM competencia WHERE id = ' + idCompetencia;
+
+    con.query(sql, function(error, resultado, fields){
+        if (error) {
+            console.log("Hubo un error en la consulta de idCompetencia", error.message);
+            return res.status(404).send("Hubo un error en la consulta de idCompetencia");
         }
         
-        res.json(opciones);
+        return callback(resultado.length == 1);
+    });
+}
+
+function existePelicula(idPelicula, callback){
+    var sql = 'SELECT * FROM pelicula WHERE id = ' + idPelicula;
+
+    con.query(sql, function(error, resultado, fields){
+        if (error) {
+            console.log("Hubo un error en la consulta de idCompetencia", error.message);
+            return res.status(404).send("Hubo un error en la consulta de idCompetencia");
+        }
+        
+        return callback(resultado.length == 1);
     });
 }
 
 //esta funcion se encarga de desordenar un array
 function desordenarArray(array) {
-
     for (var i = array.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
         var temp = array[i];
@@ -125,8 +108,89 @@ function desordenarArray(array) {
     return array;
 }
 
+function votarPelicula(req, res){
+    var idCompetencia = req.params.id;
+    var idPelicula = req.body.idPelicula;
+
+    existeCompetencia(idCompetencia, (existeIdCompetencia) => {
+        if(!existeIdCompetencia){
+            return res.status(404).send("El id de la competencia es inexistente");
+        }
+        else{
+            existePelicula(idPelicula, (existeIdPelicula) => {
+                if(!existeIdPelicula){
+                    return res.status(404).send("El id de la pelicula es inexistente");
+                }
+                else{
+                    // Obtener la cantidad de votos de la pelicula en esa competencia
+                    var sqlCantidad = 'SELECT cantidad FROM votos WHERE competencia_id = ' + idCompetencia + ' AND pelicula_id = ' + idPelicula;
+        
+                    con.query(sqlCantidad, function(error, resultado, fields) {
+                        if (error) {
+                            console.log("Hubo un error en la consulta de cantidad de votos", error.message);
+                            return res.status(404).send("Hubo un error en la consulta de cantidad de votos");
+                        }
+
+                        // Para el primer voto de la pelicula en la competencia
+                        if(resultado.length == 0){
+                            var cantidadVotos = 1;
+                            var sqlVoto = 'INSERT votos (competencia_id, pelicula_id, cantidad) VALUES ('+idCompetencia+','+idPelicula+','+cantidadVotos+')';
+                        }else{ // Si la pelicula ya tenia votos en la competencia
+                            var cantidadVotos = resultado[0].cantidad;
+                            ++cantidadVotos;
+                            var sqlVoto = 'UPDATE votos SET cantidad ='+ cantidadVotos +' WHERE competencia_id = '+idCompetencia+' AND pelicula_id = '+idPelicula;
+                        }
+                        
+                        con.query(sqlVoto, function(error, resultado, fields){
+                            if (error) {
+                                console.log("Hubo un error para agregar el voto", error.message);
+                                return res.status(404).send("Hubo un error para agregar el voto");
+                            }
+
+                            res.json(resultado);
+                        });
+                    });
+
+                }
+            });
+        }
+    });
+}
+
+
+function obtenerResultados(req, res){
+    var idCompetencia = req.params.id;
+
+    existeCompetencia(idCompetencia, (existeIdCompetencia) => {
+        if(!existeIdCompetencia){
+            return res.status(404).send("El id de la competencia es inexistente");
+        }
+        else{
+            var sql = 'SELECT C.nombre AS competencia, P.poster, P.titulo, V.cantidad AS votos FROM votos V INNER JOIN competencia C ON V.competencia_id = C.id '+
+                      'INNER JOIN pelicula P ON V.pelicula_id = P.id WHERE V.competencia_id = '+idCompetencia+' ORDER BY V.cantidad DESC LIMIT 3';
+
+            con.query(sql, function(error, respuesta, fields){
+                if (error) {
+                    console.log("Hubo un error al obtener los resultados de los votos", error.message);
+                    return res.status(404).send("Hubo un error al obtener los resultados de los votos");
+                }
+
+                var datos = {
+                    'competencia': respuesta[0].competencia,
+                    'resultados': respuesta 
+                }
+
+                res.json(datos);
+            });
+
+        }
+    });
+}
+
 
 module.exports = {
     obtenerCompetencias: obtenerCompetencias,
-    obtenerOpciones: obtenerOpciones
+    obtenerOpciones: obtenerOpciones,
+    votarPelicula: votarPelicula,
+    obtenerResultados: obtenerResultados
 };

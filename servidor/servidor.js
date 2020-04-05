@@ -17,6 +17,8 @@ app.use(bodyParser.json());
 
 app.get('/competencias', competenciasController.obtenerCompetencias);
 app.get('/competencias/:id/peliculas', competenciasController.obtenerOpciones);
+app.post('/competencias/:id/voto', competenciasController.votarPelicula);
+app.get('/competencias/:id/resultados', competenciasController.obtenerResultados);
 
 //seteamos el puerto en el cual va a escuchar los pedidos la aplicación
 var puerto = '8080';
