@@ -19,6 +19,12 @@ app.get('/competencias', competenciasController.obtenerCompetencias);
 app.get('/competencias/:id/peliculas', competenciasController.obtenerOpciones);
 app.post('/competencias/:id/voto', competenciasController.votarPelicula);
 app.get('/competencias/:id/resultados', competenciasController.obtenerResultados);
+app.get('/generos', competenciasController.obtenerGeneros);
+app.get('/directores', competenciasController.obtenerDirectores);
+app.get('/actores', competenciasController.obtenerActores);
+app.post('/competencias', competenciasController.crearCompetencia);
+app.get('/competencias/:id', competenciasController.datosCompetencia);
+app.delete('/competencias/:id/votos', competenciasController.reiniciarCompetencia);
 
 //seteamos el puerto en el cual va a escuchar los pedidos la aplicación
 var puerto = '8080';

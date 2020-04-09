@@ -1,7 +1,11 @@
-SELECT * FROM competencia WHERE id = 8;
+SELECT * FROM competencia; 
+-- WHERE nombre = '¿Cuál es el mejor drama?'; 
+-- WHERE id = 8;
+
 SELECT * FROM pelicula;
 SELECT * FROM genero;
-SELECT * FROM actor WHERE nombre LIKE '%Caprio%';
+SELECT * FROM actor; 
+-- WHERE nombre LIKE '%Caprio%';
 SELECT * FROM director;
 SELECT * FROM actor_pelicula AP INNER JOIN actor A ON AP.actor_id = A.id ORDER BY AP.actor_id;
 SELECT * FROM director_pelicula DP INNER JOIN director D ON DP.director_id = D.id WHERE DP.director_id = 3279;
@@ -48,6 +52,10 @@ INSERT votos (competencia_id, pelicula_id, cantidad) VALUES (1, 1, 4);
 UPDATE votos SET cantidad = 1 WHERE competencia_id = 1 AND pelicula_id = 1;
 SELECT C.nombre AS competencia, P.poster, P.titulo, V.cantidad AS votos FROM votos V INNER JOIN competencia C ON V.competencia_id = C.id
 INNER JOIN pelicula P ON V.pelicula_id = P.id  
-WHERE V.competencia_id = 1;
+WHERE V.competencia_id = 3 ORDER BY V.cantidad DESC;
+
+-- Reiniciar Competencia
+DELETE FROM votos WHERE competencia_id = 3; 
+SELECT C.nombre as nombre, V.* FROM votos V INNER JOIN competencia C ON V.competencia_id = C.id WHERE C.id = 3
 
 
