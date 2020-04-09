@@ -268,7 +268,7 @@ function validarNombreDeCompetencia(nombreCompetencia, callback){
 function datosCompetencia(req, res){
     var idCompetencia = req.params.id;
 
-    // HACER Creación de competencias por genero, actor, o director
+    // HACER Paso 3: Creación de competencias por genero, actor, o director
     
     var sql = "SELECT C.nombre as nombre, V.* FROM votos V INNER JOIN competencia C ON V.competencia_id = C.id"+
             " WHERE C.id = "+ idCompetencia;
