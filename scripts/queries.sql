@@ -79,7 +79,7 @@ inner join competencia_actor CA on AP.actor_id = CA.actor_id
 inner join competencia C on CA.competencia_id = C.id and CG.competencia_id = C.id
 WHERE C.id = 8;
 
--- Actor que participo en mas de 1 pelicula del mismo genero (actor_id = 2,7,13) (genero_id = 5,5,5)
+-- Actor que participo en varias peliculas del mismo genero (actor_id = 2,7,13) (genero_id = 5,5,5)
 select AP.actor_id, P.genero_id, P.* from pelicula P 
 inner join actor_pelicula AP ON AP.pelicula_id = P.id
 inner join genero G on P.genero_id = G.id
