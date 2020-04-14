@@ -22,29 +22,11 @@ PRIMARY KEY (`id`));
 ALTER TABLE votos ADD FOREIGN KEY (competencia_id) REFERENCES competencia(id);
 ALTER TABLE votos ADD FOREIGN KEY (pelicula_id) REFERENCES pelicula(id);
 
-CREATE TABLE `competencias`.`competencia_genero` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `competencia_id` INT NOT NULL,
-  `genero_id` INT UNSIGNED NOT NULL,
-PRIMARY KEY (`id`));
 
-ALTER TABLE competencia_genero ADD FOREIGN KEY (competencia_id) REFERENCES competencia(id);
-ALTER TABLE competencia_genero ADD FOREIGN KEY (genero_id) REFERENCES genero(id);
+ALTER TABLE competencia ADD COLUMN genero_id INT;
+ALTER TABLE competencia ADD COLUMN actor_id INT;
+ALTER TABLE competencia ADD COLUMN director_id INT;
 
-CREATE TABLE `competencias`.`competencia_actor` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `competencia_id` INT NOT NULL,
-  `actor_id` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`id`));
-
-ALTER TABLE competencia_actor ADD FOREIGN KEY (competencia_id) REFERENCES competencia(id);
-ALTER TABLE competencia_actor ADD FOREIGN KEY (actor_id) REFERENCES actor(id);
-
-CREATE TABLE `competencias`.`competencia_director` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `competencia_id` INT NOT NULL,
-  `director_id` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`id`));
-
-ALTER TABLE competencia_director ADD FOREIGN KEY (competencia_id) REFERENCES competencia(id);
-ALTER TABLE competencia_director ADD FOREIGN KEY (director_id) REFERENCES director(id);
+ALTER TABLE competencia ADD FOREIGN KEY (genero_id) references genero(id);
+ALTER TABLE competencia ADD FOREIGN KEY (actor_id) references actor(id);
+ALTER TABLE competencia ADD FOREIGN KEY (director_id) references director(id);

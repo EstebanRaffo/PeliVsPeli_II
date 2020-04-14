@@ -235,9 +235,36 @@ function crearCompetencia(req, res){
             return res.status(422).send("El nombre de la competencia ya existe");
         }
 
-        var sql = `INSERT competencia (nombre) VALUES("${nombreCompetencia}")`;
+        var sql_competencia = `INSERT competencia (nombre) VALUES("${nombreCompetencia}")`;
 
-        con.query(sql, function(error, resultado, fields) {
+        if(genero_id){
+            con.query(sql_competencia, function(error, resultado, fields) {
+                if (error) {
+                    console.log("Hubo un error en al crear la competencia", error.message);
+                    return res.status(404).send("Hubo un error al crear la competencias");
+                }
+    
+                var competencia = {
+                    "competencia": resultado
+                }
+                
+                obtenerCompetencia(nombreCompetencia, (laNuevaCompetencia) => {
+
+                    var sql_competencia_genero = `INSERT competencia_genero (competencia_id, genero_id) VALUES (${laNuevaCompetencia.id}, ${genero_id})`;
+                 
+                    con.query(sql_competencia_genero, function(error, resultado, fields) {
+                        if (error) {
+                            console.log("Hubo un error en al crear la competencia con genero", error.message);
+                            return res.status(404).send("Hubo un error al crear la competencia con genero");
+                        }
+                    });
+                            
+                    res.json(competencia);
+                });
+            });
+        }
+
+        con.query(sql_competencia, function(error, resultado, fields) {
             if (error) {
                 console.log("Hubo un error en al crear la competencia", error.message);
                 return res.status(404).send("Hubo un error al crear la competencias");
@@ -247,25 +274,7 @@ function crearCompetencia(req, res){
                 "competencia": resultado
             }
 
-            obtenerCompetencia(nombreCompetencia, (laNuevaCompetencia) => {
-                console.log(laNuevaCompetencia)
-                console.log('genero_id: ', genero_id)
-                console.log('director_id: ', director_id)
-                console.log('actor_id: ', actor_id)
-                if(genero_id){
-                    crearCompetenciaConGenero(laNuevaCompetencia.id, genero_id);
-                }
-    
-                if(director_id){
-                    crearCompetenciaConDirector(laNuevaCompetencia.id, director_id);
-                }
-    
-                if(actor_id){
-                    crearCompetenciaConActor(laNuevaCompetencia.id, actor_id);
-                }
-                res.json(competencia);
-            });
-
+            res.json(competencia);
         });
         
     });
