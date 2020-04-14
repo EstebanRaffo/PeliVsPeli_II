@@ -71,19 +71,22 @@ INNER JOIN competencia_actor CA ON CG.competencia_id = CA.competencia_id
 INNER JOIN actor_pelicula AP ON CA.actor_id = AP.actor_id
 INNER JOIN pelicula P ON AP.pelicula_id = P.id AND CG.genero_id = P.genero_id WHERE C.id = 8;-- ORDER BY RAND() LIMIT 2; -- actor_id = 1203;
 
-select AP.actor_id AS actor_id, C.nombre AS competencia, P.* from pelicula P
-inner join genero G on P.genero_id = G.id
-inner join competencia_genero CG on G.id = CG.genero_id
-inner join actor_pelicula AP ON P.id = AP.pelicula_id
-inner join competencia_actor CA on AP.actor_id = CA.actor_id 
-inner join competencia C on CA.competencia_id = C.id and CG.competencia_id = C.id
+SELECT C.nombre AS competencia, AP.actor_id AS actor_id, P.genero_id, P.* FROM pelicula P, competencia C, competencia_genero CG, competencia_actor CA, actor_pelicula AP
+WHERE C.id = 8 AND C.id = CG.competencia_id AND CG.genero_id = P.genero_id AND P.id = AP.pelicula_id AND AP.actor_id = CA.actor_id;
+
+SELECT AP.actor_id AS actor_id, C.nombre AS competencia, P.* FROM pelicula P
+INNER JOIN genero G ON P.genero_id = G.id
+INNER JOIN competencia_genero CG ON G.id = CG.genero_id
+INNER JOIN actor_pelicula AP ON P.id = AP.pelicula_id
+INNER JOIN competencia_actor CA ON AP.actor_id = CA.actor_id 
+INNER JOIN competencia C ON CA.competencia_id = C.id AND CG.competencia_id = C.id
 WHERE C.id = 8;
 
 -- Actor que participo en varias peliculas del mismo genero (actor_id = 2,7,13) (genero_id = 5,5,5)
-select AP.actor_id, P.genero_id, P.* from pelicula P 
-inner join actor_pelicula AP ON AP.pelicula_id = P.id
-inner join genero G on P.genero_id = G.id
-order by AP.actor_id, P.genero_id;
+SELECT AP.actor_id, P.genero_id, P.* FROM pelicula P 
+INNER JOIN actor_pelicula AP ON AP.pelicula_id = P.id
+INNER JOIN genero G ON P.genero_id = G.id
+ORDER BY AP.actor_id, P.genero_id;
  
 
 
