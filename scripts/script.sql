@@ -23,9 +23,9 @@ ALTER TABLE votos ADD FOREIGN KEY (competencia_id) REFERENCES competencia(id);
 ALTER TABLE votos ADD FOREIGN KEY (pelicula_id) REFERENCES pelicula(id);
 
 
-ALTER TABLE competencia ADD COLUMN genero_id INT;
-ALTER TABLE competencia ADD COLUMN actor_id INT;
-ALTER TABLE competencia ADD COLUMN director_id INT;
+ALTER TABLE competencia ADD COLUMN genero_id INT UNSIGNED;
+ALTER TABLE competencia ADD COLUMN actor_id INT UNSIGNED;
+ALTER TABLE competencia ADD COLUMN director_id INT UNSIGNED;
 
 ALTER TABLE competencia ADD FOREIGN KEY (genero_id) references genero(id);
 ALTER TABLE competencia ADD FOREIGN KEY (actor_id) references actor(id);
