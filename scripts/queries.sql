@@ -25,61 +25,49 @@ SELECT * FROM genero;
 -- OPCIONES COMPETENCIA + GENERO 
 SELECT * FROM competencia_genero;
 -- Opciones para Competencia id = 1 ¿Cuál es el mejor drama? con genero_id = 8
-SELECT C.nombre AS competencia, P.* FROM competencia C INNER JOIN competencia_genero CG ON C.id = CG.competencia_id
-INNER JOIN pelicula P ON CG.genero_id = P.genero_id WHERE C.id = 1 ORDER BY RAND() LIMIT 2;
+SELECT C.nombre AS competencia, P.* FROM competencia C INNER JOIN pelicula P ON CG.genero_id = P.genero_id WHERE C.id = 1 ORDER BY RAND() LIMIT 2;
 
 -- Opciones para Competencia id = 2 ¿Cuál es la comedia que más te hizo reir? con genero_id = 5
-SELECT C.nombre AS competencia, P.* FROM competencia C INNER JOIN competencia_genero CG ON C.id = CG.competencia_id
-INNER JOIN pelicula P ON CG.genero_id = P.genero_id WHERE C.id = 2 ORDER BY RAND() LIMIT 2;
+SELECT C.nombre AS competencia, P.* FROM competencia C INNER JOIN pelicula P ON CG.genero_id = P.genero_id WHERE C.id = 2 ORDER BY RAND() LIMIT 2;
 
 -- Opciones para Competencia id = 7 ¿Qué pelicula de terror te asustó más?
-SELECT C.nombre AS competencia, P.* FROM competencia C INNER JOIN competencia_genero CG ON C.id = CG.competencia_id
-INNER JOIN pelicula P ON CG.genero_id = P.genero_id WHERE C.id = 7 ORDER BY RAND() LIMIT 2;
+SELECT C.nombre AS competencia, P.* FROM competencia C INNER JOIN pelicula P ON CG.genero_id = P.genero_id WHERE C.id = 7 ORDER BY RAND() LIMIT 2;
 
 -- Opciones para Competencia id = 8 ¿Cuál documental te pareció más interesante?
-SELECT C.nombre AS competencia, P.* FROM competencia C INNER JOIN competencia_genero CG ON C.id = CG.competencia_id
-INNER JOIN pelicula P ON CG.genero_id = P.genero_id WHERE C.id = 8 ORDER BY RAND() LIMIT 2;
+SELECT C.nombre AS competencia, P.* FROM competencia C INNER JOIN pelicula P ON CG.genero_id = P.genero_id WHERE C.id = 8 ORDER BY RAND() LIMIT 2;
 
 -- OPCIONES COMPETENCIA + ACTOR
 SELECT * FROM competencia_actor;
 -- Opciones para Competencia id = 3 ¿Cuál es la mejor peli con Cameron Diaz? con actor_id = 269
-SELECT C.nombre AS competencia, P.* FROM competencia C INNER JOIN competencia_actor CA ON C.id = CA.competencia_id
-INNER JOIN actor_pelicula AP ON CA.actor_id = AP.actor_id
+SELECT C.nombre AS competencia, P.* FROM competencia C INNER JOIN actor_pelicula AP ON CA.actor_id = AP.actor_id
 INNER JOIN pelicula P ON AP.pelicula_id = P.id WHERE C.id = 3 ORDER BY RAND() LIMIT 2;
 
 -- Opciones para Competencia id = 4 ¿Cuál es tu favorita de Adam Sandler?
-SELECT C.nombre AS competencia, P.* FROM competencia C INNER JOIN competencia_actor CA ON C.id = CA.competencia_id
-INNER JOIN actor_pelicula AP ON CA.actor_id = AP.actor_id
+SELECT C.nombre AS competencia, P.* FROM competencia C INNER JOIN actor_pelicula AP ON CA.actor_id = AP.actor_id
 INNER JOIN pelicula P ON AP.pelicula_id = P.id WHERE C.id = 4 ORDER BY RAND() LIMIT 2;
 
 -- Opciones para Competencia id = 6 ¿En qué pelicula merecia el Oscar Leonardo Di Caprio?
-SELECT C.nombre AS competencia, P.* FROM competencia C INNER JOIN competencia_actor CA ON C.id = CA.competencia_id
-INNER JOIN actor_pelicula AP ON CA.actor_id = AP.actor_id
+SELECT C.nombre AS competencia, P.* FROM competencia C INNER JOIN actor_pelicula AP ON CA.actor_id = AP.actor_id
 INNER JOIN pelicula P ON AP.pelicula_id = P.id WHERE C.id = 6 ORDER BY RAND() LIMIT 2;
 
 -- OPCIONES COMPETENCIA + DIRECTOR
 SELECT * FROM competencia_director;
 -- Opciones para Competencia id = 5 ¿Cuál es la mejor pelicula dirigida por Woody Allen?
-SELECT C.nombre AS competencia, P.* FROM competencia C INNER JOIN competencia_director CD ON C.id = CD.competencia_id
-INNER JOIN director_pelicula DP ON CD.director_id = DP.director_id
+SELECT C.nombre AS competencia, P.* FROM competencia C INNER JOIN director_pelicula DP ON CD.director_id = DP.director_id
 INNER JOIN pelicula P ON DP.pelicula_id = P.id WHERE C.id = 5 ORDER BY RAND() LIMIT 2;
 
 -- OPCIONES COMPETENCIA + GENERO + ACTOR
 SELECT AP.actor_id AS actor_id, C.nombre AS competencia, P.* FROM competencia C 
-INNER JOIN competencia_genero CG ON C.id = CG.competencia_id
-INNER JOIN competencia_actor CA ON CG.competencia_id = CA.competencia_id
 INNER JOIN actor_pelicula AP ON CA.actor_id = AP.actor_id
-INNER JOIN pelicula P ON AP.pelicula_id = P.id AND CG.genero_id = P.genero_id WHERE C.id = 8;-- ORDER BY RAND() LIMIT 2; -- actor_id = 1203;
+INNER JOIN pelicula P ON AP.pelicula_id = P.id AND C.genero_id = P.genero_id WHERE C.id = 8;-- ORDER BY RAND() LIMIT 2; -- actor_id = 1203;
 
-SELECT C.nombre AS competencia, AP.actor_id AS actor_id, P.genero_id, P.* FROM pelicula P, competencia C, competencia_genero CG, competencia_actor CA, actor_pelicula AP
-WHERE C.id = 8 AND C.id = CG.competencia_id AND CG.genero_id = P.genero_id AND P.id = AP.pelicula_id AND AP.actor_id = CA.actor_id;
+SELECT C.nombre AS competencia, AP.actor_id AS actor_id, P.genero_id, P.* FROM pelicula P, competencia C, actor_pelicula AP
+WHERE C.id = 8 AND P.id = AP.pelicula_id AND AP.actor_id = C.actor_id;
 
 SELECT AP.actor_id AS actor_id, C.nombre AS competencia, P.* FROM pelicula P
 INNER JOIN genero G ON P.genero_id = G.id
-INNER JOIN competencia_genero CG ON G.id = CG.genero_id
 INNER JOIN actor_pelicula AP ON P.id = AP.pelicula_id
-INNER JOIN competencia_actor CA ON AP.actor_id = CA.actor_id 
-INNER JOIN competencia C ON CA.competencia_id = C.id AND CG.competencia_id = C.id
+INNER JOIN competencia C ON AP.actor_id = C.actor_id
 WHERE C.id = 8;
 
 -- Actor que participo en varias peliculas del mismo genero (actor_id = 2,7,13) (genero_id = 5,5,5)
@@ -88,9 +76,6 @@ INNER JOIN actor_pelicula AP ON AP.pelicula_id = P.id
 INNER JOIN genero G ON P.genero_id = G.id
 ORDER BY AP.actor_id, P.genero_id;
  
-
-
-
 
 
 -- AGREGAR VOTOS
