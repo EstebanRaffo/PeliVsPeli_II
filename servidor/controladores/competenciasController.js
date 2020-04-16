@@ -77,7 +77,7 @@ function existeCompetencia(idCompetencia, callback){
             return res.status(404).send("Hubo un error en la consulta de idCompetencia");
         }
         
-        return callback(resultado.length == 1);
+        return callback(resultado.length == 1 ? resultado : null);
     });
 }
 
@@ -235,81 +235,42 @@ function crearCompetencia(req, res){
             return res.status(422).send("El nombre de la competencia ya existe");
         }
 
-        var sql_competencia = `INSERT competencia (nombre) VALUES("${nombreCompetencia}")`;
+        var campos = ['nombre'];
+        var valores = ["'"+nombreCompetencia+"'"];
 
         if(genero_id){
-            con.query(sql_competencia, function(error, resultado, fields) {
-                if (error) {
-                    console.log("Hubo un error en al crear la competencia", error.message);
-                    return res.status(404).send("Hubo un error al crear la competencias");
-                }
-    
-                var competencia = {
-                    "competencia": resultado
-                }
-                
-                obtenerCompetencia(nombreCompetencia, (laNuevaCompetencia) => {
-
-                    var sql_competencia_genero = `INSERT competencia_genero (competencia_id, genero_id) VALUES (${laNuevaCompetencia.id}, ${genero_id})`;
-                 
-                    con.query(sql_competencia_genero, function(error, resultado, fields) {
-                        if (error) {
-                            console.log("Hubo un error en al crear la competencia con genero", error.message);
-                            return res.status(404).send("Hubo un error al crear la competencia con genero");
-                        }
-                    });
-                            
-                    res.json(competencia);
-                });
-            });
+            campos.push('genero_id');
+            valores.push(genero_id);
         }
 
-        con.query(sql_competencia, function(error, resultado, fields) {
+        if(actor_id){
+            campos.push('actor_id');
+            valores.push(actor_id);
+        }
+
+        if(director_id){
+            campos.push('director_id');
+            valores.push(director_id);
+        }
+
+        campos.join(', ');
+        valores.join(', ');
+
+        var sql = `INSERT competencia (${campos}) VALUES(${valores})`; 
+        console.log(sql);
+
+        con.query(sql, function(error, resultado, fields) {
             if (error) {
                 console.log("Hubo un error en al crear la competencia", error.message);
-                return res.status(404).send("Hubo un error al crear la competencias");
+                return res.status(404).send("Hubo un error al crear la competencia");
             }
 
             var competencia = {
                 "competencia": resultado
             }
-
-            res.json(competencia);
+                            
+            res.json(competencia); 
         });
-        
-    });
-}
-
-function crearCompetenciaConGenero(competencia_id, genero_id){
-    var sql_competencia_genero = `INSERT competencia_genero (competencia_id, genero_id) VALUES (${competencia_id}, ${genero_id})`;
-                 
-    con.query(sql_competencia_genero, function(error, resultado, fields) {
-        if (error) {
-            console.log("Hubo un error en al crear la competencia con genero", error.message);
-            return res.status(404).send("Hubo un error al crear la competencia con genero");
-        }
-    });
-}
-
-function crearCompetenciaConDirector(competencia_id, director_id){
-    var sql_competencia_director = `INSERT competencia_director (competencia_id, director_id) VALUES (${competencia_id}, ${director_id})`;
-                 
-    con.query(sql_competencia_director, function(error, resultado, fields) {
-        if (error) {
-            console.log("Hubo un error en al crear la competencia con director", error.message);
-            return res.status(404).send("Hubo un error al crear la competencia con director");
-        }
-    });
-}
-
-function crearCompetenciaConActor(competencia_id, actor_id){
-    var sql_competencia_actor = `INSERT competencia_actor (competencia_id, actor_id) VALUES (${competencia_id}, ${actor_id})`;
-                 
-    con.query(sql_competencia_actor, function(error, resultado, fields) {
-        if (error) {
-            console.log("Hubo un error en al crear la competencia con actor", error.message);
-            return res.status(404).send("Hubo un error al crear la competencia con actor");
-        }
     });
 }
 
@@ -329,33 +290,46 @@ function obtenerCompetencia(nombreCompetencia, callback){
 function datosCompetencia(req, res){
     var idCompetencia = req.params.id;
 
-    // HACER Paso 3: Creación de competencias por genero, actor, o director
-    
-    var sql = "SELECT C.nombre as nombre, V.* FROM votos V INNER JOIN competencia C ON V.competencia_id = C.id"+
-            " WHERE C.id = "+ idCompetencia;
-    
-    con.query(sql, function(error, resultado, fields) {
-        if (error) {
-            console.log("Hubo un error en la consulta de la competencia", error.message);
-            return res.status(404).send("Hubo un error en la consulta de la competencia");
+    existeCompetencia(idCompetencia, (competencia) => {
+        if(!competencia){
+            return res.status(404).send("El id de la competencia es inexistente");
         }
+    
+        var sql = "SELECT C.nombre AS nombre, G.nombre AS genero_nombre, A.nombre AS actor_nombre, D.nombre AS director_nombre "+ 
+            "FROM competencia C, genero G, actor A, director D "+
+            "WHERE C.genero_id = G.id AND C.actor_id = A.id AND C.director_id = D.id AND C.id = "+ idCompetencia;
         
-        var datos = {
-            'nombre': resultado[0].nombre
+        var campos = 'C.nombre AS nombre';
+        var tablas = 'competencia C';
+        var condiciones = 'C.id =' + idCompetencia;
+        
+        if(genero_id){
+            
         }
+    
+        con.query(sql, function(error, resultado, fields) {
+            if (error) {
+                console.log("Hubo un error en la consulta de la competencia", error.message);
+                return res.status(404).send("Hubo un error en la consulta de la competencia");
+            }
+            
+            var datos = {
+                'nombre': resultado[0].nombre
+            }
 
-        res.json(datos);
+            res.json(datos);
 
-        // this.cargarCompetencia = function (id, data){
-            // // Se coloca en el elemento correspondiente el nombre de la competencia
-            // $(".nombre").text(data.nombre);
-            // $(".nombre").val(data.nombre);
-            // // Se coloca en el elemento correspondiente el género de películas de la competencia, si es que hay alguno
-            // $(".genero").text(data.genero_nombre);
-            // // Se coloca en el elemento correspondiente el actor/actriz de la competencia, si es que hay alguno/a
-            // $(".actor").text(data.actor_nombre);
-            // // Se coloca en el elemento correspondiente el director/a de la competencia, si es que hay alguno/a
-            // $(".director").text(data.director_nombre);
+            // this.cargarCompetencia = function (id, data){
+                // // Se coloca en el elemento correspondiente el nombre de la competencia
+                // $(".nombre").text(data.nombre);
+                // $(".nombre").val(data.nombre);
+                // // Se coloca en el elemento correspondiente el género de películas de la competencia, si es que hay alguno
+                // $(".genero").text(data.genero_nombre);
+                // // Se coloca en el elemento correspondiente el actor/actriz de la competencia, si es que hay alguno/a
+                // $(".actor").text(data.actor_nombre);
+                // // Se coloca en el elemento correspondiente el director/a de la competencia, si es que hay alguno/a
+                // $(".director").text(data.director_nombre);
+        });
     });
 }
 

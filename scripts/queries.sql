@@ -64,17 +64,24 @@ INNER JOIN pelicula P ON AP.pelicula_id = P.id AND C.genero_id = P.genero_id WHE
 SELECT C.nombre AS competencia, AP.actor_id AS actor_id, P.genero_id, P.* FROM pelicula P, competencia C, actor_pelicula AP
 WHERE C.id = 8 AND P.id = AP.pelicula_id AND AP.actor_id = C.actor_id;
 
-SELECT AP.actor_id AS actor_id, C.nombre AS competencia, P.* FROM pelicula P
-INNER JOIN genero G ON P.genero_id = G.id
-INNER JOIN actor_pelicula AP ON P.id = AP.pelicula_id
-INNER JOIN competencia C ON AP.actor_id = C.actor_id
-WHERE C.id = 8;
 
 -- Actor que participo en varias peliculas del mismo genero (actor_id = 2,7,13) (genero_id = 5,5,5)
 SELECT AP.actor_id, P.genero_id, P.* FROM pelicula P 
 INNER JOIN actor_pelicula AP ON AP.pelicula_id = P.id
 INNER JOIN genero G ON P.genero_id = G.id
 ORDER BY AP.actor_id, P.genero_id;
+
+-- DATOS COMPETENCIA + GENERO + ACTOR + DIRECTOR
+SELECT C.nombre AS nombre, G.nombre AS genero_nombre, A.nombre AS actor_nombre, D.nombre AS director_nombre 
+FROM competencia C, genero G, actor A, director D
+WHERE C.genero_id = G.id AND C.actor_id = A.id AND C.director_id = D.id AND C.id = 13; 
+
+
+
+
+
+
+
  
 
 
