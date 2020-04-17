@@ -2,6 +2,7 @@ SELECT * FROM pelicula;
 SELECT * FROM actor; 
 -- WHERE nombre LIKE '%Caprio%';
 SELECT * FROM director;
+
 SELECT * FROM actor_pelicula AP INNER JOIN actor A ON AP.actor_id = A.id ORDER BY AP.actor_id;
 SELECT * FROM director_pelicula DP INNER JOIN director D ON DP.director_id = D.id WHERE DP.director_id = 3279;
 SELECT DP.director_id, COUNT(*) AS peliculas FROM director_pelicula DP INNER JOIN director D ON DP.director_id = D.id GROUP BY DP.director_id 
@@ -13,14 +14,39 @@ WHERE AP.actor_id = 1203;
 
 -- Peliculas de un director 
 SELECT D.nombre, P.* FROM pelicula P INNER JOIN director_pelicula DP ON DP.pelicula_id = P.id INNER JOIN director D ON DP.director_id = D.id 
-WHERE DP.director_id = 3445;
-
-
--- OBTENER OPCIONES
+WHERE DP.director_id = 3279;
 
 SELECT * FROM competencia; 
 SELECT * FROM genero;
--- INSERT competencia_genero (competencia_id, genero_id) VALUES ();
+
+-- DATOS COMPETENCIA + GENERO + ACTOR + DIRECTOR
+SELECT C.nombre AS nombre, G.nombre AS genero_nombre, A.nombre AS actor_nombre, D.nombre AS director_nombre 
+FROM competencia C, genero G, actor A, director D
+WHERE C.id = 25 and C.genero_id = G.id AND C.actor_id = A.id AND C.director_id = D.id; 
+
+
+-- Actor que participo en varias peliculas del mismo genero (actor_id = 2,7,13) (genero_id = 5,5,5)
+SELECT AP.actor_id, P.genero_id, P.* FROM pelicula P 
+INNER JOIN actor_pelicula AP ON AP.pelicula_id = P.id
+INNER JOIN genero G ON P.genero_id = G.id
+ORDER BY AP.actor_id, P.genero_id;
+
+
+-- AGREGAR VOTOS
+SELECT * FROM votos;
+SELECT cantidad FROM votos WHERE competencia_id = 1 AND pelicula_id = 1;
+INSERT votos (competencia_id, pelicula_id, cantidad) VALUES (1, 1, 4);
+UPDATE votos SET cantidad = 1 WHERE competencia_id = 1 AND pelicula_id = 1;
+SELECT C.nombre AS competencia, P.poster, P.titulo, V.cantidad AS votos FROM votos V INNER JOIN competencia C ON V.competencia_id = C.id
+INNER JOIN pelicula P ON V.pelicula_id = P.id  
+WHERE V.competencia_id = 3 ORDER BY V.cantidad DESC;
+
+-- Reiniciar Competencia
+DELETE FROM votos WHERE competencia_id = 3; 
+SELECT C.nombre AS nombre, V.* FROM votos V INNER JOIN competencia C ON V.competencia_id = C.id WHERE C.id = 3;
+
+
+-- OBTENER OPCIONES
 
 -- OPCIONES COMPETENCIA + GENERO 
 
@@ -63,32 +89,3 @@ INNER JOIN pelicula P ON AP.pelicula_id = P.id AND C.genero_id = P.genero_id WHE
 
 SELECT C.nombre AS competencia, AP.actor_id AS actor_id, P.genero_id, P.* FROM pelicula P, competencia C, actor_pelicula AP
 WHERE C.id = 8 AND P.id = AP.pelicula_id AND AP.actor_id = C.actor_id;
-
-
--- DATOS COMPETENCIA + GENERO + ACTOR + DIRECTOR
-SELECT C.nombre AS nombre, G.nombre AS genero_nombre, A.nombre AS actor_nombre, D.nombre AS director_nombre 
-FROM competencia C, genero G, actor A, director D
-WHERE C.genero_id = G.id AND C.actor_id = A.id AND C.director_id = D.id AND C.id = 13; 
-
-
--- Actor que participo en varias peliculas del mismo genero (actor_id = 2,7,13) (genero_id = 5,5,5)
-SELECT AP.actor_id, P.genero_id, P.* FROM pelicula P 
-INNER JOIN actor_pelicula AP ON AP.pelicula_id = P.id
-INNER JOIN genero G ON P.genero_id = G.id
-ORDER BY AP.actor_id, P.genero_id;
-
-
--- AGREGAR VOTOS
-SELECT * FROM votos;
-SELECT cantidad FROM votos WHERE competencia_id = 1 AND pelicula_id = 1;
-INSERT votos (competencia_id, pelicula_id, cantidad) VALUES (1, 1, 4);
-UPDATE votos SET cantidad = 1 WHERE competencia_id = 1 AND pelicula_id = 1;
-SELECT C.nombre AS competencia, P.poster, P.titulo, V.cantidad AS votos FROM votos V INNER JOIN competencia C ON V.competencia_id = C.id
-INNER JOIN pelicula P ON V.pelicula_id = P.id  
-WHERE V.competencia_id = 3 ORDER BY V.cantidad DESC;
-
--- Reiniciar Competencia
-DELETE FROM votos WHERE competencia_id = 3; 
-SELECT C.nombre AS nombre, V.* FROM votos V INNER JOIN competencia C ON V.competencia_id = C.id WHERE C.id = 3
-
-

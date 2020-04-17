@@ -77,7 +77,7 @@ function existeCompetencia(idCompetencia, callback){
             return res.status(404).send("Hubo un error en la consulta de idCompetencia");
         }
         
-        return callback(resultado.length == 1 ? resultado : null);
+        return callback(resultado.length == 1 ? resultado[0] : null);
     });
 }
 
@@ -227,8 +227,8 @@ function obtenerActores(req, res){
 function crearCompetencia(req, res){
     var nombreCompetencia = req.body.nombre;
     var genero_id = req.body.genero;
-    var director_id = req.body.director;
     var actor_id = req.body.actor;
+    var director_id = req.body.director;
 
     obtenerCompetencia(nombreCompetencia, (existelaCompetencia) => {
         if(existelaCompetencia){
@@ -253,11 +253,7 @@ function crearCompetencia(req, res){
             valores.push(director_id);
         }
 
-        campos.join(', ');
-        valores.join(', ');
-
-        var sql = `INSERT competencia (${campos}) VALUES(${valores})`; 
-        console.log(sql);
+        var sql = `INSERT competencia (${campos}) VALUES (${valores})`; 
 
         con.query(sql, function(error, resultado, fields) {
             if (error) {
@@ -294,19 +290,31 @@ function datosCompetencia(req, res){
         if(!competencia){
             return res.status(404).send("El id de la competencia es inexistente");
         }
-    
-        var sql = "SELECT C.nombre AS nombre, G.nombre AS genero_nombre, A.nombre AS actor_nombre, D.nombre AS director_nombre "+ 
-            "FROM competencia C, genero G, actor A, director D "+
-            "WHERE C.genero_id = G.id AND C.actor_id = A.id AND C.director_id = D.id AND C.id = "+ idCompetencia;
         
-        var campos = 'C.nombre AS nombre';
-        var tablas = 'competencia C';
-        var condiciones = 'C.id =' + idCompetencia;
+        var campos = ['C.nombre AS nombre'];
+        var tablas = ['competencia C'];
+        var condiciones = ['C.id = ' + idCompetencia];
         
-        if(genero_id){
-            
+        if(competencia.genero_id){
+            campos.push('G.nombre AS genero_nombre');
+            tablas.push('genero G');
+            condiciones.push('C.genero_id = G.id');
+        }
+        if(competencia.actor_id){
+            campos.push('A.nombre AS actor_nombre');
+            tablas.push('actor A');
+            condiciones.push('C.actor_id = A.id');
+        }
+        if(competencia.director_id){
+            campos.push('D.nombre AS director_nombre');
+            tablas.push('director D');
+            condiciones.push('C.director_id = D.id');
         }
     
+        var sqlCondiciones = condiciones.join(' AND ');
+        
+        var sql = `SELECT ${campos} FROM ${tablas} WHERE ${sqlCondiciones}`;
+
         con.query(sql, function(error, resultado, fields) {
             if (error) {
                 console.log("Hubo un error en la consulta de la competencia", error.message);
@@ -321,17 +329,6 @@ function datosCompetencia(req, res){
             }
 
             res.json(datos);
-
-            // this.cargarCompetencia = function (id, data){
-                // // Se coloca en el elemento correspondiente el nombre de la competencia
-                // $(".nombre").text(data.nombre);
-                // $(".nombre").val(data.nombre);
-                // // Se coloca en el elemento correspondiente el género de películas de la competencia, si es que hay alguno
-                // $(".genero").text(data.genero_nombre);
-                // // Se coloca en el elemento correspondiente el actor/actriz de la competencia, si es que hay alguno/a
-                // $(".actor").text(data.actor_nombre);
-                // // Se coloca en el elemento correspondiente el director/a de la competencia, si es que hay alguno/a
-                // $(".director").text(data.director_nombre);
         });
     });
 }
