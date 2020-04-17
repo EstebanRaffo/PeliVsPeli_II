@@ -314,7 +314,10 @@ function datosCompetencia(req, res){
             }
             
             var datos = {
-                'nombre': resultado[0].nombre
+                'nombre': resultado[0].nombre,
+                'genero_nombre': resultado[0].genero_nombre,
+                'actor_nombre': resultado[0].actor_nombre,
+                'director_nombre': resultado[0].director_nombre
             }
 
             res.json(datos);
