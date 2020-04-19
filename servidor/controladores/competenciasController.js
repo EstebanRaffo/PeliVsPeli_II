@@ -22,36 +22,7 @@ function obtenerOpciones(req, res) {
         if(!competencia){
             return res.status(404).send("El id de la competencia es inexistente");
         }
-        
-        // Según Guía 2. Competencias sin genero, actor o director asociados.
-        // switch(idCompetencia){
-        //     case '1':
-        //         var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C WHERE P.genero_id = 8 AND C.id = 1 ORDER BY rand() LIMIT 2';
-        //         break;
-        //     case '2':
-        //         var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C WHERE P.genero_id = 5 AND C.id = 2 ORDER BY rand() LIMIT 2';
-        //         break;
-        //     case '3':
-        //         var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C, actor_pelicula AP WHERE AP.pelicula_id = P.id AND AP.actor_id = 269 AND C.id = 3 ORDER BY rand() LIMIT 2';        
-        //         break;
-        //     case '4':
-        //         var sql = 'SELECT C.nombre AS competencia, P.* from pelicula P, competencia C, actor_pelicula AP WHERE AP.pelicula_id = P.id AND AP.actor_id = 13 AND C.id = 4 ORDER BY rand() LIMIT 2';
-        //         break;
-        //     case '5':
-        //         var sql = 'SELECT C.nombre AS competencia, P.* from pelicula P, competencia C, director_pelicula DP WHERE DP.pelicula_id = P.id and DP.director_id = 3279 AND C.id = 5 ORDER BY rand() LIMIT 2';
-        //         break;
-        //     case '6':
-        //         var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C, actor_pelicula AP WHERE AP.pelicula_id = P.id AND AP.actor_id = 1203 AND C.id = 6 ORDER BY rand() LIMIT 2';            
-        //         break;
-        //     case '7':
-        //         var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C WHERE P.genero_id = 10 AND C.id = 7 ORDER BY rand() LIMIT 2';
-        //         break;
-        //     case '8':
-        //         var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C WHERE P.genero_id = 7 AND C.id = 8 ORDER BY rand() LIMIT 2';
-        //         break;
-        // }
 
-        // Adaptación según guía 3. Todas las competencias deben estar asociadas a un género, actor ó director para buscar opciones.
         var campos = ['C.nombre AS competencia, P.*'];
         var tablas = ['competencia C, pelicula P'];
         var condiciones = ['C.id = ' + idCompetencia];
@@ -77,10 +48,6 @@ function obtenerOpciones(req, res) {
                 console.log("Hubo un error al obtener las opciones de la competencia", error.message);
                 return res.status(404).send("Hubo un error al obtener las opciones de la competencia");
             }
-            
-            // if(resultado.length == 0){
-            //     return res.status(422).send("Esta competencia no tiene opciones disponibles");
-            // }
 
             var opciones = {
                 'competencia': resultado[0].competencia,
@@ -201,6 +168,7 @@ function obtenerResultados(req, res){
 
 
 // ABM Competencias
+
 function obtenerGeneros(req, res){
     var sql = "select * from genero";
     
@@ -240,15 +208,6 @@ function obtenerActores(req, res){
     });
 }
 
-// sgMail
-//   .send(msg)
-//   .then(() => {}, error => {
-//     console.error(error);
-
-//     if (error.response) {
-//       console.error(error.response.body)
-//     }
-//   });
 
 function crearCompetencia(req, res){
     var nombreCompetencia = req.body.nombre;
@@ -261,38 +220,45 @@ function crearCompetencia(req, res){
             return res.status(422).send("El nombre de la competencia ya existe");
         }
 
-        var campos = ['nombre'];
-        var valores = ["'"+nombreCompetencia+"'"];
+        opcionesDisponibles(genero_id, actor_id, director_id, (opciones) => {
+            if(!opciones){
+                return res.status(422).send("Esta combinación de género, actor y director no tiene opciones disponibles");
+            }
+            
+            var campos = ['nombre'];
+            var valores = ["'"+nombreCompetencia+"'"];
 
-        if(genero_id){
-            campos.push('genero_id');
-            valores.push(genero_id);
-        }
-
-        if(actor_id){
-            campos.push('actor_id');
-            valores.push(actor_id);
-        }
-
-        if(director_id){
-            campos.push('director_id');
-            valores.push(director_id);
-        }
-
-        var sql = `INSERT competencia (${campos}) VALUES (${valores})`; 
-     
-        con.query(sql, function(error, resultado, fields) {
-            if (error) {
-                console.log("Hubo un error en al crear la competencia", error.message);
-                return res.status(404).send("Hubo un error al crear la competencia");
+            if(genero_id){
+                campos.push('genero_id');
+                valores.push(genero_id);
             }
 
-            var competencia = {
-                "competencia": resultado
+            if(actor_id){
+                campos.push('actor_id');
+                valores.push(actor_id);
             }
-                            
-            res.json(competencia); 
+
+            if(director_id){
+                campos.push('director_id');
+                valores.push(director_id);
+            }
+
+            var sql = `INSERT competencia (${campos}) VALUES (${valores})`; 
+        
+            con.query(sql, function(error, resultado, fields) {
+                if (error) {
+                    console.log("Hubo un error en al crear la competencia", error.message);
+                    return res.status(404).send("Hubo un error al crear la competencia");
+                }
+
+                var competencia = {
+                    "competencia": resultado
+                }
+                                
+                res.json(competencia); 
+            });
         });
+
     });
 }
 
@@ -306,6 +272,42 @@ function obtenerCompetencia(nombreCompetencia, callback){
         }
         
         return callback(resultado.length == 1 ? resultado : null);
+    });
+}
+
+function opcionesDisponibles(genero_id, actor_id, director_id, callback){
+    var campos = ['P.*'];
+    var tablas = ['pelicula P'];
+    var condiciones = [];
+    
+    if(genero_id){
+        condiciones.push(`P.genero_id = ${genero_id}`);
+    }
+    if(actor_id){
+        tablas.push('actor_pelicula AP');
+        condiciones.push(`AP.actor_id = ${actor_id} AND AP.pelicula_id = P.id`);
+    }
+    if(director_id){
+        tablas.push('director_pelicula DP');
+        condiciones.push(`DP.director_id = ${director_id} AND DP.pelicula_id = P.id`);
+    }
+
+    var sqlCondiciones = condiciones.join(' AND ');
+    
+    if(condiciones.length == 0){
+        var sql = `SELECT ${campos} FROM ${tablas}`;
+    }
+    else{
+        var sql = `SELECT ${campos} FROM ${tablas} WHERE ${sqlCondiciones}`;
+    }
+    
+    con.query(sql, function(error, resultado, fields) {
+        if (error) {
+            console.log("Hubo un error al consultar las opciones disponibles", error.message);
+            return res.status(404).send("Hubo un error al consultar las opciones disponibles");
+        }
+        
+        return callback(resultado.length > 1 ? resultado : null);
     });
 }
 

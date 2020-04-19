@@ -1,7 +1,6 @@
 SELECT * FROM pelicula;
-SELECT * FROM actor; 
--- WHERE nombre LIKE '%Caprio%';
-SELECT * FROM director;
+SELECT * FROM actor WHERE nombre LIKE '%Cook%';
+SELECT * FROM director WHERE nombre LIKE '%Blaise%';
 
 SELECT * FROM actor_pelicula AP INNER JOIN actor A ON AP.actor_id = A.id ORDER BY AP.actor_id;
 SELECT * FROM director_pelicula DP INNER JOIN director D ON DP.director_id = D.id WHERE DP.director_id = 3279;
@@ -10,11 +9,11 @@ HAVING COUNT(*) > 3 ORDER BY DP.director_id;
 
 -- Peliculas de un actor
 SELECT A.nombre, P.* FROM pelicula P INNER JOIN actor_pelicula AP ON AP.pelicula_id = P.id INNER JOIN actor A ON AP.actor_id = A.id 
-WHERE AP.actor_id = 13;
+WHERE AP.actor_id = 1;
 
 -- Peliculas de un director 
 SELECT D.nombre, P.* FROM pelicula P INNER JOIN director_pelicula DP ON DP.pelicula_id = P.id INNER JOIN director D ON DP.director_id = D.id 
-WHERE DP.director_id = 3279;
+WHERE DP.director_id = 3311;
 
 SELECT * FROM competencia; 
 SELECT * FROM genero;
@@ -37,7 +36,7 @@ WHERE V.competencia_id = 3 ORDER BY V.cantidad DESC;
 DELETE FROM votos WHERE competencia_id = 3; 
 SELECT C.nombre AS nombre, V.* FROM votos V INNER JOIN competencia C ON V.competencia_id = C.id WHERE C.id = 3;
 
--- Ver actores y directores que participan en una misma pelicula
+-- Ver actores y directores que participan con peliculas en común
 SELECT DP.director_id, D.nombre as director, AP.actor_id, A.nombre as actor, P.titulo, P.genero_id FROM pelicula P 
 INNER JOIN director_pelicula DP ON P.id = DP.pelicula_id
 INNER JOIN director D ON DP.director_id = D.id
@@ -98,10 +97,24 @@ ORDER BY RAND() LIMIT 2;
 -- OPCIONES COMPETENCIA + GENERO + ACTOR + DIRECTOR
 SELECT C.nombre AS competencia, P.* 
 FROM pelicula P, competencia C, actor_pelicula AP, director_pelicula DP
-WHERE C.id = 41 AND C.genero_id = P.genero_id AND C.actor_id = AP.actor_id AND AP.pelicula_id = P.id AND C.director_id = DP.director_id AND DP.pelicula_id = P.id 
+WHERE C.id = 41 AND C.genero_id = P.genero_id AND C.actor_id = AP.actor_id AND AP.pelicula_id = P.id AND C.director_id = DP.director_id AND DP.pelicula_id = P.id
 ORDER BY RAND() LIMIT 2;
 
-SELECT C.nombre AS competencia, P.* 
-FROM pelicula P, competencia C, actor_pelicula AP, director_pelicula DP
-WHERE C.id = 42 AND C.genero_id = P.genero_id AND C.actor_id = AP.actor_id AND AP.pelicula_id = P.id AND C.director_id = DP.director_id AND DP.pelicula_id = P.id; 
--- ORDER BY RAND() LIMIT 2;
+-- OPCIONES DISPONIBLES CON GENERO + ACTOR + DIRECTOR 
+SELECT P.* 
+FROM pelicula P, actor_pelicula AP, director_pelicula DP
+WHERE P.genero_id = 1 AND AP.actor_id = 1555 AND AP.pelicula_id = P.id AND DP.director_id = 3309 AND DP.pelicula_id = P.id; 
+
+SELECT P.* 
+FROM pelicula P, actor_pelicula AP, director_pelicula DP
+WHERE AP.actor_id = 1719 AND AP.pelicula_id = P.id AND DP.director_id = 3282 AND DP.pelicula_id = P.id;
+
+
+
+
+
+
+
+
+
+
