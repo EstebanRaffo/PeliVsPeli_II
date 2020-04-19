@@ -25,6 +25,8 @@ app.get('/actores', competenciasController.obtenerActores);
 app.post('/competencias', competenciasController.crearCompetencia);
 app.get('/competencias/:id', competenciasController.datosCompetencia);
 app.delete('/competencias/:id/votos', competenciasController.reiniciarCompetencia);
+app.delete('/competencias/:id', competenciasController.eliminarCompetencia);
+app.put('/competencias/:id', competenciasController.editarCompetencia);
 
 //seteamos el puerto en el cual va a escuchar los pedidos la aplicación
 var puerto = '8080';

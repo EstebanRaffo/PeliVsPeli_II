@@ -3,6 +3,7 @@ CREATE TABLE `competencias`.`competencia` (
   `nombre` VARCHAR(100) NOT NULL,
 PRIMARY KEY (`id`));
 
+-- insert de Guia 2
 insert competencia (nombre) values("¿Cuál es el mejor drama?");
 insert competencia (nombre) values("¿Cuál es la comedia que más te hizo reir?");
 insert competencia (nombre) values("¿Cuál es la mejor peli con Cameron Diaz?");

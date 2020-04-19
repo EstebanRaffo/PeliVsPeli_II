@@ -85,7 +85,7 @@ function CompetenciasController () {
 	    function(data) {
 	    	// Se cargan las opciones en el DOM
 	    	self.cargarOpciones(id, data);
-	    });
+		});
 	},
 	
 	this.cargarOpciones = function (id, opciones){

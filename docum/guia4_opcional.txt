@@ -1,0 +1,49 @@
+Guía 4: Deploy
+
+¡Ahora llegó la hora de salir a la cancha! Para eso, vas a realizar algunos ajustes al proyecto para que se “adapte” a este nuevo 
+entorno, y luego publicar el back-end y el front-end por separado, pero conectados.
+
+Recuerda que esta guía es opcional, no debes completarla para aprobar el proyecto. Esto es porque existen muchos entornos de deploy, y 
+no es obligatorio que uses Docker para publicar tu proyecto. Es tu decisión agregar esta parte a tu proyecto o no.
+
+Paso 1: Preparación del proyecto
+Lo primero a hacer es preparar el proyecto para que pueda adaptarse al nuevo entorno, vas a tener que preparar un script con todo el 
+código SQL que inicialice la base de datos y separar el front-end del front-end en repositorios separados. Vamos paso a paso para 
+conseguir tener todo listo:
+
+Variables de entorno
+Modificá en el back-end lo necesario para que las configuraciones que deban ser diferentes en el entorno de producción (a priori, 
+relacionadas con la base de datos) se tomen de variables de entorno. Definí esas variables de entorno en un archivo .env.
+
+Base de datos
+Escribí en un único archivo el script necesario para crear la estructura de tablas y relaciones en la base de datos, que además inserte
+todos los datos iniciales al igual que el script original que usás en este proyecto. Va a ser necesario que separes el código del
+back-end y del front-end en dos proyectos distintos, para no requerir configuraciones adicionales. Subí ambos proyectos a dos 
+repositorios diferentes de Github.com.
+
+
+Paso 2: Deploy de back-end en Docker Playground
+Lo primero que vas a “deployar” es el back-end. Vamos a hacerlo utilizando Docker en Docker Playground, para lo cual vas a precisar 
+crear los archivos Dockerfile que permitan armar las imágenes para los contenedores. Recordemos los pasos necesarios:
+
+
+Primero local
+1. Creá el Dockerfile para la imagen que va a contener Node.js con Express.
+2. Creá el Dockerfile para la imagen que va a contener MySQL.
+3. Realizá las modificaciones necesarias, si hay alguna, en las variables de entorno en .env.
+4. Probá que localmente funcionen tus Dockerfiles: construí ambas imágenes utilizando docker build con los parámetros necesarios, y luego 
+creá containers vinculados que las ejecuten.
+
+Subir a producción
+. Subí los cambios al repositorio Github.com.
+. Ingresá en Docker Playground y creá una nueva instancia.
+. Creá los dos containers vinculados que ejecuten las imágenes en dicha instancia.
+. Probá que el back-end de la aplicación responda correctamente.
+
+
+Paso 3: Deploy de front-end en github.io.
+Ahora, a “deployar” el front-end. Tené en cuenta que debe ir conectado con el back-end que publicaste en el paso anterior. Recordá que
+tenés que: Configurar la variable que contiene la dirección IP del servidor en el front-end. Actualizar los cambios en el repositorio 
+en Github.com. Ingresar al proyecto en Github.com a través de la web y, utilizando Github pages, publicar el proyecto.
+
+¡Tu aplicación está publicada! ¡Hora de compartirla con todo el mundo!

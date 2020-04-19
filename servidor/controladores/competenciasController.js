@@ -18,44 +18,70 @@ function obtenerCompetencias(req, res) {
 function obtenerOpciones(req, res) {
     var idCompetencia = req.params.id;
 
-    existeCompetencia(idCompetencia, (existeId) => {    
-        if(!existeId){
+    existeCompetencia(idCompetencia, (competencia) => {    
+        if(!competencia){
             return res.status(404).send("El id de la competencia es inexistente");
         }
         
-        switch(idCompetencia){
-            case '1':
-                var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C WHERE P.genero_id = 8 AND C.id = 1 ORDER BY rand() LIMIT 2';
-                break;
-            case '2':
-                var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C WHERE P.genero_id = 5 AND C.id = 2 ORDER BY rand() LIMIT 2';
-                break;
-            case '3':
-                var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C, actor_pelicula AP WHERE AP.pelicula_id = P.id AND AP.actor_id = 269 AND C.id = 3 ORDER BY rand() LIMIT 2';        
-                break;
-            case '4':
-                var sql = 'SELECT C.nombre AS competencia, P.* from pelicula P, competencia C, actor_pelicula AP WHERE AP.pelicula_id = P.id AND AP.actor_id = 13 AND C.id = 4 ORDER BY rand() LIMIT 2';
-                break;
-            case '5':
-                var sql = 'SELECT C.nombre AS competencia, P.* from pelicula P, competencia C, director_pelicula DP WHERE DP.pelicula_id = P.id and DP.director_id = 3279 AND C.id = 5 ORDER BY rand() LIMIT 2';
-                break;
-            case '6':
-                var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C, actor_pelicula AP WHERE AP.pelicula_id = P.id AND AP.actor_id = 1203 AND C.id = 6 ORDER BY rand() LIMIT 2';            
-                break;
-            case '7':
-                var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C WHERE P.genero_id = 10 AND C.id = 7 ORDER BY rand() LIMIT 2';
-                break;
-            case '8':
-                var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C WHERE P.genero_id = 7 AND C.id = 8 ORDER BY rand() LIMIT 2';
-                break;
+        // Según Guía 2. Competencias sin genero, actor o director asociados.
+        // switch(idCompetencia){
+        //     case '1':
+        //         var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C WHERE P.genero_id = 8 AND C.id = 1 ORDER BY rand() LIMIT 2';
+        //         break;
+        //     case '2':
+        //         var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C WHERE P.genero_id = 5 AND C.id = 2 ORDER BY rand() LIMIT 2';
+        //         break;
+        //     case '3':
+        //         var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C, actor_pelicula AP WHERE AP.pelicula_id = P.id AND AP.actor_id = 269 AND C.id = 3 ORDER BY rand() LIMIT 2';        
+        //         break;
+        //     case '4':
+        //         var sql = 'SELECT C.nombre AS competencia, P.* from pelicula P, competencia C, actor_pelicula AP WHERE AP.pelicula_id = P.id AND AP.actor_id = 13 AND C.id = 4 ORDER BY rand() LIMIT 2';
+        //         break;
+        //     case '5':
+        //         var sql = 'SELECT C.nombre AS competencia, P.* from pelicula P, competencia C, director_pelicula DP WHERE DP.pelicula_id = P.id and DP.director_id = 3279 AND C.id = 5 ORDER BY rand() LIMIT 2';
+        //         break;
+        //     case '6':
+        //         var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C, actor_pelicula AP WHERE AP.pelicula_id = P.id AND AP.actor_id = 1203 AND C.id = 6 ORDER BY rand() LIMIT 2';            
+        //         break;
+        //     case '7':
+        //         var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C WHERE P.genero_id = 10 AND C.id = 7 ORDER BY rand() LIMIT 2';
+        //         break;
+        //     case '8':
+        //         var sql = 'SELECT C.nombre AS competencia, P.* FROM pelicula P, competencia C WHERE P.genero_id = 7 AND C.id = 8 ORDER BY rand() LIMIT 2';
+        //         break;
+        // }
+
+        // Adaptación según guía 3. Todas las competencias deben estar asociadas a un género, actor ó director para buscar opciones.
+        var campos = ['C.nombre AS competencia, P.*'];
+        var tablas = ['competencia C, pelicula P'];
+        var condiciones = ['C.id = ' + idCompetencia];
+        
+        if(competencia.genero_id){
+            condiciones.push('C.genero_id = P.genero_id');
         }
+        if(competencia.actor_id){
+            tablas.push('actor_pelicula AP');
+            condiciones.push('C.actor_id = AP.actor_id AND AP.pelicula_id = P.id');
+        }
+        if(competencia.director_id){
+            tablas.push('director_pelicula DP');
+            condiciones.push('C.director_id = DP.director_id AND DP.pelicula_id = P.id');
+        }
+    
+        var sqlCondiciones = condiciones.join(' AND ');
+        
+        var sql = `SELECT ${campos} FROM ${tablas} WHERE ${sqlCondiciones} ORDER BY RAND() LIMIT 2`;
 
         con.query(sql, function(error, resultado, fields) {
             if (error) {
-                console.log("Hubo un error en la consulta de opciones", error.message);
-                return res.status(404).send("Hubo un error en la consulta de opciones");
+                console.log("Hubo un error al obtener las opciones de la competencia", error.message);
+                return res.status(404).send("Hubo un error al obtener las opciones de la competencia");
             }
             
+            // if(resultado.length == 0){
+            //     return res.status(422).send("Esta competencia no tiene opciones disponibles");
+            // }
+
             var opciones = {
                 'competencia': resultado[0].competencia,
                 'peliculas': resultado
@@ -226,9 +252,9 @@ function obtenerActores(req, res){
 
 function crearCompetencia(req, res){
     var nombreCompetencia = req.body.nombre;
-    var genero_id = req.body.genero;
-    var actor_id = req.body.actor;
-    var director_id = req.body.director;
+    var genero_id = req.body.genero != 0 ? req.body.genero : null;
+    var actor_id = req.body.actor != 0 ? req.body.actor : null;
+    var director_id = req.body.director != 0 ? req.body.director : null;
 
     obtenerCompetencia(nombreCompetencia, (existelaCompetencia) => {
         if(existelaCompetencia){
@@ -254,7 +280,7 @@ function crearCompetencia(req, res){
         }
 
         var sql = `INSERT competencia (${campos}) VALUES (${valores})`; 
-
+     
         con.query(sql, function(error, resultado, fields) {
             if (error) {
                 console.log("Hubo un error en al crear la competencia", error.message);
@@ -341,12 +367,12 @@ function reiniciarCompetencia(req, res){
             return res.status(404).send("El id de la competencia es inexistente");
         }
         
-        var sql = 'DELETE FROM votos WHERE competencia_id = '+ idCompetencia;
+        var sql = `DELETE FROM votos WHERE competencia_id = ${idCompetencia}`;
 
         con.query(sql, function(error, respuesta, fields){
             if (error) {
-                console.log("Hubo un error al obtener los resultados de los votos", error.message);
-                return res.status(404).send("Hubo un error al obtener los resultados de los votos");
+                console.log("Hubo un error al reiniciar la competencia", error.message);
+                return res.status(404).send("Hubo un error al reiniciar la competencia");
             }
 
             res.json(respuesta);
@@ -354,6 +380,57 @@ function reiniciarCompetencia(req, res){
     });
 }
 
+function eliminarCompetencia(req, res){
+    var idCompetencia = req.params.id;
+
+    existeCompetencia(idCompetencia, (existeIdCompetencia) => {
+        if(!existeIdCompetencia){
+            return res.status(404).send("El id de la competencia es inexistente");
+        }
+        
+        var sqlBorrarVotos = `DELETE FROM votos WHERE competencia_id = ${idCompetencia}`;
+
+        con.query(sqlBorrarVotos, function(error, respuesta, fields){
+            if (error) {
+                console.log("Hubo un error al eliminar los votos de la competencia", error.message);
+                return res.status(404).send("Hubo un error al eliminar los votos de la competencia");
+            }
+
+            var sql = `DELETE FROM competencia WHERE id = ${idCompetencia}`;
+
+            con.query(sql, function(error, respuesta, fields){
+                if (error) {
+                    console.log("Hubo un error al eliminar la competencia", error.message);
+                    return res.status(404).send("Hubo un error al eliminar la competencia");
+                }
+    
+                res.json(respuesta);
+            });
+        });
+    });
+}
+
+function editarCompetencia(req, res){
+    var idCompetencia = req.params.id;
+    var nuevoNombre = req.body.nombre;
+
+    existeCompetencia(idCompetencia, (existeIdCompetencia) => {
+        if(!existeIdCompetencia){
+            return res.status(404).send("El id de la competencia es inexistente");
+        }
+        
+        var sql = `UPDATE competencia SET nombre = '${nuevoNombre}' WHERE id = ${idCompetencia}`;
+      
+        con.query(sql, function(error, respuesta, fields){
+            if (error) {
+                console.log("Hubo un error al editar la competencia", error.message);
+                return res.status(404).send("Hubo un error al editar la competencia");
+            }
+
+            res.json(respuesta);
+        });
+    });
+}
 
 module.exports = {
     obtenerCompetencias: obtenerCompetencias,
@@ -365,5 +442,7 @@ module.exports = {
     obtenerDirectores: obtenerDirectores,
     crearCompetencia: crearCompetencia,
     reiniciarCompetencia: reiniciarCompetencia,
-    datosCompetencia: datosCompetencia
+    datosCompetencia: datosCompetencia,
+    eliminarCompetencia: eliminarCompetencia,
+    editarCompetencia: editarCompetencia
 };
