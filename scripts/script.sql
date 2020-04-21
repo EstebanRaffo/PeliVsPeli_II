@@ -1,3 +1,7 @@
+CREATE DATABASE competencias;
+
+USE competencias;
+
 CREATE TABLE `competencias`.`competencia` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(100) NOT NULL,
