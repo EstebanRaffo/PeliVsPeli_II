@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: competencias
+-- Host: 127.0.0.1    Database: competencias_ii
 -- ------------------------------------------------------
 -- Server version	8.0.19
 
@@ -88,7 +88,7 @@ CREATE TABLE `competencia` (
   CONSTRAINT `competencia_ibfk_1` FOREIGN KEY (`genero_id`) REFERENCES `genero` (`id`),
   CONSTRAINT `competencia_ibfk_2` FOREIGN KEY (`actor_id`) REFERENCES `actor` (`id`),
   CONSTRAINT `competencia_ibfk_3` FOREIGN KEY (`director_id`) REFERENCES `director` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,7 +97,7 @@ CREATE TABLE `competencia` (
 
 LOCK TABLES `competencia` WRITE;
 /*!40000 ALTER TABLE `competencia` DISABLE KEYS */;
-INSERT INTO `competencia` VALUES (3,'Votar películas en gral. ',NULL,NULL,NULL),(33,'Mejor Comedia de Adam Sandler',5,13,NULL),(34,'¿Cual es la mejor Comedia dirigida por Woody Allen?',5,NULL,3279),(37,'¿Cual es la mejor Comedia ?',5,NULL,NULL),(38,'¿Cual es la mejor película dirigida por Woody Allen?',NULL,NULL,3279),(39,'¿En qué película merecía el oscar Leonardo Di Caprio?',NULL,1203,NULL),(40,'Mejor película dirigida por Gore Verbinsky y que actúa Johnny Depp',NULL,995,3309),(41,'Mejor película de Acción dirigida por  Gore Verbinsky y que actúa Johnny Depp',1,995,3309),(42,'Prueba',1,1,3311);
+INSERT INTO `competencia` VALUES (3,'Votar películas en gral. ',NULL,NULL,NULL),(33,'Mejor Comedia de Adam Sandler',5,13,NULL),(34,'¿Cual es la mejor Comedia dirigida por Woody Allen?',5,NULL,3279),(37,'¿Cual es la mejor Comedia ?',5,NULL,NULL),(38,'¿Cual es la mejor película dirigida por Woody Allen?',NULL,NULL,3279),(39,'¿En qué película merecía el oscar Leonardo Di Caprio?',NULL,1203,NULL),(40,'Mejor película dirigida por Gore Verbinsky y que actúa Johnny Depp',NULL,995,3309),(41,'Mejor película de Acción dirigida por  Gore Verbinsky y que actúa Johnny Depp',1,995,3309),(42,'Prueba',1,1,3311),(44,'Mejor peli con Cedric Kaprisch y Romain Duris ',NULL,1719,3282),(46,'Mejor película con G. Verbinski y Orlando Blum',1,1555,3309);
 /*!40000 ALTER TABLE `competencia` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -216,6 +216,59 @@ INSERT INTO `pelicula` VALUES (1,'Narc',2002,105,6,'Joe Carnahan','2003-01-10',7
 UNLOCK TABLES;
 
 --
+-- Table structure for table `rol`
+--
+
+DROP TABLE IF EXISTS `rol`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `rol` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rol`
+--
+
+LOCK TABLES `rol` WRITE;
+/*!40000 ALTER TABLE `rol` DISABLE KEYS */;
+INSERT INTO `rol` VALUES (1,'administrador'),(2,'participante');
+/*!40000 ALTER TABLE `rol` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `usuario`
+--
+
+DROP TABLE IF EXISTS `usuario`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `usuario` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `password` varchar(250) NOT NULL,
+  `salt` varchar(250) NOT NULL,
+  `rol_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `rol_id` (`rol_id`),
+  CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`rol_id`) REFERENCES `rol` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `usuario`
+--
+
+LOCK TABLES `usuario` WRITE;
+/*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
+/*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `votos`
 --
 
@@ -232,7 +285,7 @@ CREATE TABLE `votos` (
   KEY `pelicula_id` (`pelicula_id`),
   CONSTRAINT `votos_ibfk_1` FOREIGN KEY (`competencia_id`) REFERENCES `competencia` (`id`),
   CONSTRAINT `votos_ibfk_2` FOREIGN KEY (`pelicula_id`) REFERENCES `pelicula` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -241,7 +294,7 @@ CREATE TABLE `votos` (
 
 LOCK TABLES `votos` WRITE;
 /*!40000 ALTER TABLE `votos` DISABLE KEYS */;
-INSERT INTO `votos` VALUES (9,3,91,1),(15,37,634,1),(16,37,188,1),(17,37,115,1),(18,37,286,1),(19,37,387,1),(20,37,240,1),(21,39,406,2),(22,39,555,2),(23,39,653,1),(24,39,295,2),(25,38,585,1),(26,38,590,2),(27,38,533,2),(28,38,563,1),(29,38,286,1),(30,41,361,2),(31,41,541,1),(32,41,279,3),(33,34,83,1),(34,34,286,1),(35,34,563,1),(36,34,585,3),(37,40,361,2),(38,40,541,2),(39,40,279,1),(40,33,669,1),(41,3,227,1),(42,3,460,1),(43,3,600,1),(44,3,334,1),(45,3,491,1);
+INSERT INTO `votos` VALUES (9,3,91,1),(15,37,634,1),(16,37,188,1),(17,37,115,1),(18,37,286,1),(19,37,387,1),(20,37,240,1),(21,39,406,2),(22,39,555,2),(23,39,653,1),(24,39,295,2),(25,38,585,1),(26,38,590,2),(27,38,533,2),(28,38,563,1),(29,38,286,1),(30,41,361,2),(31,41,541,1),(32,41,279,3),(33,34,83,1),(34,34,286,1),(35,34,563,1),(36,34,585,3),(37,40,361,2),(38,40,541,2),(39,40,279,1),(41,3,227,1),(42,3,460,1),(43,3,600,1),(44,3,334,1),(45,3,491,1),(49,33,2,1),(50,3,18,1),(51,33,257,2),(52,33,572,1),(53,33,669,1);
 /*!40000 ALTER TABLE `votos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -254,4 +307,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-18 20:49:24
+-- Dump completed on 2020-05-06 21:18:53

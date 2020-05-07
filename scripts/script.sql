@@ -1,8 +1,8 @@
-CREATE DATABASE competencias;
+CREATE DATABASE competencias_ii;
 
-USE competencias;
+USE competencias_ii;
 
-CREATE TABLE `competencias`.`competencia` (
+CREATE TABLE `competencias_ii`.`competencia` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(100) NOT NULL,
 PRIMARY KEY (`id`));
