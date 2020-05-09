@@ -47,3 +47,4 @@ insert rol (nombre) values ('administrador');
 insert rol (nombre) values ('participante');
 
 ALTER TABLE usuario ADD FOREIGN KEY (rol_id) references rol(id);
+ALTER TABLE usuario ADD COLUMN avatar VARCHAR(250);
