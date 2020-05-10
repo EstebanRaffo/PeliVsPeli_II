@@ -4,3 +4,5 @@ $(function() {
 	var competenciasController = new CompetenciasController();
  	competenciasController.obtenerCompetencias();
 });
+
+// Agregar nombre y foto de usuario dinamicamente
