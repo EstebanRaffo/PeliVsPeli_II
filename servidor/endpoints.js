@@ -1,6 +1,8 @@
 const competenciasController = require('./controladores/competenciasController');
+const userController = require('./controladores/userController');
 
 function agregarEndpoints(app){
+    // Competencias
     app.get('/competencias', competenciasController.obtenerCompetencias);
     app.get('/competencias/:id/peliculas', competenciasController.obtenerOpciones);
     app.post('/competencias/:id/voto', competenciasController.votarPelicula);
@@ -13,8 +15,11 @@ function agregarEndpoints(app){
     app.delete('/competencias/:id/votos', competenciasController.reiniciarCompetencia);
     app.delete('/competencias/:id', competenciasController.eliminarCompetencia);
     app.put('/competencias/:id', competenciasController.editarCompetencia);
+    // Usuarios
+    app.post('/usuario/crear', userController.nuevoUsuario);
+    app.post('/login', userController.login);
 }
 
 module.exports = {
-    agregarEndpoints,
-  }
+    agregarEndpoints
+}

@@ -1,13 +1,4 @@
-
-.logo{
-	float: left;
-}
-
-.usuario{
-	float: right;
-}
-
-
-.clear{
-	clear: both;
+header{
+	display: flex;
+	justify-content: space-between;
 }
