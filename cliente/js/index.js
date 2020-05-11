@@ -28,7 +28,7 @@ $(function() {
 		return sessionStorage.length != 0;
 	}
 
-	// Agregar nombre y foto de usuario dinamicamente
+	// Agregar nombre y foto de usuario dinamicamente. Implementar growl.
 	const usuario = sessionStorage.getItem('usuarioActivo');
 	$('#user').html(usuario);	
 });
