@@ -257,7 +257,7 @@ CREATE TABLE `usuario` (
   PRIMARY KEY (`id`),
   KEY `rol_id` (`rol_id`),
   CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`rol_id`) REFERENCES `rol` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -266,6 +266,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
+INSERT INTO `usuario` VALUES (13,'Administrador','admin@admin.com','$2b$10$PMKopGkjl.ddcvK6l6x62.NjDXcFXLKnJ.PAJK/G8AUw6hmLnNW8u','$2b$10$PMKopGkjl.ddcvK6l6x62.',1,NULL),(19,'Esteban Raffo','e.fraffo@gmail.com','$2b$10$eWdfwFgMCJNvrcIZ1FaqTOjQKV9xHYzHWj0V3Y9X/vjxh61O3q2z.','$2b$10$eWdfwFgMCJNvrcIZ1FaqTO',2,NULL);
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -286,7 +287,7 @@ CREATE TABLE `votos` (
   KEY `pelicula_id` (`pelicula_id`),
   CONSTRAINT `votos_ibfk_1` FOREIGN KEY (`competencia_id`) REFERENCES `competencia` (`id`),
   CONSTRAINT `votos_ibfk_2` FOREIGN KEY (`pelicula_id`) REFERENCES `pelicula` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -295,7 +296,7 @@ CREATE TABLE `votos` (
 
 LOCK TABLES `votos` WRITE;
 /*!40000 ALTER TABLE `votos` DISABLE KEYS */;
-INSERT INTO `votos` VALUES (9,3,91,1),(15,37,634,1),(16,37,188,1),(17,37,115,1),(18,37,286,1),(19,37,387,1),(20,37,240,1),(21,39,406,2),(22,39,555,2),(23,39,653,1),(24,39,295,2),(25,38,585,1),(26,38,590,2),(27,38,533,2),(28,38,563,1),(29,38,286,1),(30,41,361,2),(31,41,541,2),(32,41,279,3),(33,34,83,1),(34,34,286,1),(35,34,563,1),(36,34,585,3),(37,40,361,2),(38,40,541,2),(39,40,279,1),(41,3,227,1),(42,3,460,1),(43,3,600,1),(44,3,334,1),(45,3,491,1),(49,33,2,1),(50,3,18,1),(51,33,257,2),(52,33,572,1),(53,33,669,1),(54,33,334,1);
+INSERT INTO `votos` VALUES (9,3,91,1),(15,37,634,1),(16,37,188,1),(17,37,115,1),(18,37,286,1),(19,37,387,1),(20,37,240,1),(21,39,406,3),(22,39,555,2),(23,39,653,1),(24,39,295,2),(25,38,585,1),(26,38,590,2),(27,38,533,2),(28,38,563,1),(29,38,286,1),(30,41,361,2),(31,41,541,2),(32,41,279,3),(33,34,83,1),(34,34,286,1),(35,34,563,1),(36,34,585,3),(37,40,361,2),(38,40,541,2),(39,40,279,1),(41,3,227,1),(42,3,460,1),(43,3,600,1),(44,3,334,1),(45,3,491,1),(49,33,2,1),(50,3,18,1),(51,33,257,2),(52,33,572,1),(53,33,669,1),(54,33,334,1),(55,44,86,2),(56,44,289,1),(57,34,590,1);
 /*!40000 ALTER TABLE `votos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -308,4 +309,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-08 21:39:18
+-- Dump completed on 2020-05-11 19:06:35
