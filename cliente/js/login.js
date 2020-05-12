@@ -99,7 +99,8 @@ $('#login').click(function(event){
             }
         },
         error: function(error){
-            window.location.href = "error.html";
+            event.preventDefault();
+            alert('Usuario o contraseña inválidos');
         }
     });
 });

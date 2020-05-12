@@ -1,21 +1,19 @@
 // Al finalizarse de cargar el DOM:
 $(function() {
 
-	if(!sesion()){
+	if(!sesionActiva()){
 		window.location.href = "login.html";
 	}
 
 	$('#logout').click(function(){
+		esAdmin() ? window.location.href = "../login.html" : window.location.href = "login.html";
 		sessionStorage.clear();
-		// location.reload(true); Terminar
-		if(esAdmin()){
-			window.location.href = "../../html/login.html";			
-		}
-		else{
-			window.location.href = "login.html";
-		}
 	});
 
+	// Agregar nombre y foto de usuario dinamicamente. 
+	const usuario = sessionStorage.getItem('usuarioActivo');
+	$('#user').html(usuario);	
+	
 	// Se obtienen del backend y cargan en el DOM las competencias existentes
 	var competenciasController = new CompetenciasController();
  	competenciasController.obtenerCompetencias();
@@ -24,11 +22,7 @@ $(function() {
 		return sessionStorage.getItem("rol") == 1;
 	}
 
-	function sesion(){
-		return sessionStorage.length != 0;
+	function sesionActiva(){
+		return sessionStorage.length > 0;
 	}
-
-	// Agregar nombre y foto de usuario dinamicamente. Implementar growl.
-	const usuario = sessionStorage.getItem('usuarioActivo');
-	$('#user').html(usuario);	
 });
