@@ -1,5 +1,6 @@
 var con = require('../lib/conexionbd');
 var bcrypt = require('bcrypt');
+const multer = require('multer');
 
 // Alta de Usuario
 function nuevoUsuario(req, res){
