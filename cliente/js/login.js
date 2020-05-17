@@ -57,6 +57,11 @@ $('#newUser').click(function(event){
     var rol_id = 2;
 
     // Agregar validación de formulario
+    if(password != repass){
+        alert('Las contraseñas no coinciden');
+        event.preventDefault();
+        return;
+    }
 
     $.post({
         url: server + "/usuario/crear",
@@ -86,6 +91,7 @@ $('#login').click(function(event){
             const rol = infoUsuario.rol_id;
             sessionStorage.setItem('usuarioActivo', infoUsuario.name);
             sessionStorage.setItem('rol', infoUsuario.rol_id);
+            sessionStorage.setItem('id', infoUsuario.id);
             switch(rol){
                 case 1:
                     window.location.href = "./administrar/index.html";
