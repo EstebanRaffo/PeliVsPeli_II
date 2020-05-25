@@ -92,6 +92,7 @@ $('#login').click(function(event){
             sessionStorage.setItem('usuarioActivo', infoUsuario.name);
             sessionStorage.setItem('rol', infoUsuario.rol_id);
             sessionStorage.setItem('id', infoUsuario.id);
+
             switch(rol){
                 case 1:
                     window.location.href = "./administrar/index.html";
@@ -106,7 +107,17 @@ $('#login').click(function(event){
         },
         error: function(error){
             event.preventDefault();
-            alert('Usuario o contraseña inválidos');
+            showAlertError();
         }
     });
 });
+
+
+
+function showAlertError(){
+    $('#alert').empty();
+    $('#alert').css({'position': 'absolute', 'top': '10px', 'right': '16px', 'font-size': '18px', 'z-index': '1'});
+    $('#alert').append(`<div class="alert alert-danger"><strong>Usuario o contraseña inválidos</strong></div>`);
+    $('#alert').show();
+    $('#alert').fadeOut(6000);
+}

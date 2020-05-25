@@ -1,10 +1,12 @@
 // Al finalizarse de cargar el DOM:
 $(function() {
-
+	
 	if(!sesionActiva()){
 		window.location.href = "login.html";
 	}
 
+	showAlertSuccess();
+	
 	$('#logout').click(function(){
 		esAdmin() ? window.location.href = "../login.html" : window.location.href = "login.html";
 		sessionStorage.clear();
@@ -26,3 +28,11 @@ $(function() {
 		return sessionStorage.length > 0;
 	}
 });
+
+function showAlertSuccess(){
+    $('#alert').empty();
+    $('#alert').css({'position': 'absolute', 'top': '10px', 'right': '16px', 'font-size': '18px', 'z-index': '1'});
+    $('#alert').append(`<div class="alert alert-success"><strong>Login exitoso</strong></div>`);
+    $('#alert').show();
+    $('#alert').fadeOut(5000);
+}
