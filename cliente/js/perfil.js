@@ -13,7 +13,7 @@ $(function(){
             $('#repass').val(perfilUsuario.password);
         },
         error: function(error){
-            alert(error);
+            // alert(error);
         }
     });
 })
@@ -38,9 +38,7 @@ $('#save').click(function(event){
         url: server + "/usuario/"+id+"/actualizar",
         data: {"name": name, "email": email, "password": password},
         success: function(){
-            alert('Usuario actualizado con exito');
-            window.location.href = "index.html";
-            // esAdmin() ? window.location.href = "./administrar/index.html" : window.location.href = "index.html";
+            showAlertSuccess(); 
         },
         error: function(error){
             alert(error);
@@ -49,11 +47,24 @@ $('#save').click(function(event){
 
 });
 
+
+function showAlertSuccess(){
+    $('#alert').empty();
+    $('#alert').css({'position': 'absolute', 'top': '10px', 'right': '16px', 'font-size': '18px', 'z-index': '1'});
+    $('#alert').append(`<div class="alert alert-success"><strong>Los datos han sido guardados</strong></div>`);
+    $('#alert').show();
+    $('#alert').fadeOut(5000);
+}
+
 function esAdmin(){
     return sessionStorage.getItem("rol") == 1;
 }
 
 
 $('#cancel').click(function(){
+    esAdmin() ? window.location.href = "./administrar/index.html" : window.location.href = "index.html";  
+})
+
+$('#volver').click(function(){
     esAdmin() ? window.location.href = "./administrar/index.html" : window.location.href = "index.html";  
 })

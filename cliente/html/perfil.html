@@ -15,8 +15,12 @@
             <span>Peli vs Peli</span>
         </div>
     </header>
+    
     <div class="container">
-        <h1>Edit Profile</h1>
+        <div class="volver">
+            <h1>Edit Profile</h1>
+            <button id="volver" type="button" class="btn btn-primary">Volver</button>
+        </div>
         <hr>
         <div class="row">
             <!-- left column -->
@@ -29,11 +33,14 @@
             </div>
             <!-- edit form column -->
             <div class="col-md-9 personal-info">
-                <div class="alert alert-info alert-dismissable">
+                <!-- Alertas -->
+		        <div id="alert"></div>
+                <!-- <div class="alert alert-info alert-dismissable">
                     <a class="panel-close close" data-dismiss="alert">×</a>
-                    <i class="fa fa-coffee"></i> This is an <strong>.alert</strong>. Use this to show important messages to the user. </div>
+                    <i class="fa fa-coffee"></i> This is an <strong>.alert</strong>. Use this to show important messages to the user. 
+                </div> -->
                 <h3>Personal info</h3>
-                <!-- <form action="/picture" class="form-horizontal" role="form" enctype="multipart/form-data"> -->
+                
                 <form class="form-horizontal" role="form" enctype="multipart/form-data">
                     <div class="form-group">
                         <label class="col-lg-3 control-label">First name:</label>

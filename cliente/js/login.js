@@ -95,9 +95,11 @@ $('#login').click(function(event){
 
             switch(rol){
                 case 1:
+                    showAlertSuccess();
                     window.location.href = "./administrar/index.html";
                     break;
                 case 2:
+                    showAlertSuccess();
                     window.location.href = "index.html";
                     break;
                 default:
@@ -105,16 +107,22 @@ $('#login').click(function(event){
                     break;
             }
         },
-        error: function(error){
+        error: function(){
             event.preventDefault();
             showAlertError();
         }
     });
 });
 
+function showAlertSuccess(){
+    $('#alert').empty();
+    $('#alert').css({'position': 'absolute', 'top': '10px', 'right': '16px', 'font-size': '18px', 'z-index': '1'});
+    $('#alert').append(`<div class="alert alert-success"><strong>Login exitoso</strong></div>`);
+    $('#alert').show();
+    $('#alert').fadeOut(5000);
+}
 
-
-function showAlertError(){
+function showAlertError(error){
     $('#alert').empty();
     $('#alert').css({'position': 'absolute', 'top': '10px', 'right': '16px', 'font-size': '18px', 'z-index': '1'});
     $('#alert').append(`<div class="alert alert-danger"><strong>Usuario o contraseña inválidos</strong></div>`);

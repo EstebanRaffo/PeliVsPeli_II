@@ -44,3 +44,17 @@ header .logo span:last-child {
 	font-weight: bold;
 	vertical-align: middle;
 }
+
+/* .volver h1, button{
+	display: inline-block;
+} */
+
+.volver{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.volver button{
+	height: 50%;
+}
