@@ -1,5 +1,5 @@
+// Cargar datos del usuario
 $(function(){
-    // Cargar datos de usuario
     var server = 'http://localhost:8080';
     var id = sessionStorage.getItem('id');
 
@@ -13,10 +13,20 @@ $(function(){
             $('#repass').val(perfilUsuario.password);
         },
         error: function(error){
-            // alert(error);
+            console.log(error);
         }
     });
-})
+});
+
+$('#cancel').click(function(){
+    esAdmin() ? window.location.href = "./administrar/index.html" : window.location.href = "index.html";  
+});
+
+$('#volver').click(function(){
+    esAdmin() ? window.location.href = "./administrar/index.html" : window.location.href = "index.html";  
+});
+
+
 
 $('#save').click(function(event){
     event.preventDefault();
@@ -27,21 +37,22 @@ $('#save').click(function(event){
     var password = $('#password').val();
     var repass = $('#repass').val();
 
-    if(password != repass){
-        alert('Las contraseñas no coinciden');
-        event.preventDefault();
-        return;
-    }
+    // if(password != repass){
+    //     alert('Las contraseñas no coinciden');
+    //     event.preventDefault();
+    //     return;
+    // }
     // Agregar validación de formulario
 
-    $.put({
+    $.ajax({
         url: server + "/usuario/"+id+"/actualizar",
+        method: 'put',
         data: {"name": name, "email": email, "password": password},
         success: function(){
             showAlertSuccess(); 
         },
         error: function(error){
-            alert(error);
+            console.log(error);
         }
     });
 
@@ -61,10 +72,4 @@ function esAdmin(){
 }
 
 
-$('#cancel').click(function(){
-    esAdmin() ? window.location.href = "./administrar/index.html" : window.location.href = "index.html";  
-})
-
-$('#volver').click(function(){
-    esAdmin() ? window.location.href = "./administrar/index.html" : window.location.href = "index.html";  
-})
+    
