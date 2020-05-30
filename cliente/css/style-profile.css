@@ -58,3 +58,8 @@ header .logo span:last-child {
 .volver button{
 	height: 50%;
 }
+
+.has-error{
+	border: 1px solid red;
+	color: red;
+}

@@ -2,15 +2,16 @@
 $(function(){
     var server = 'http://localhost:8080';
     var id = sessionStorage.getItem('id');
-
+    console.log(id)
     $.get({
         url: server + "/usuario/perfil",
         data: {"id": id},
         success: function(perfilUsuario){
+            $('#avatar').attr('src', perfilUsuario.avatar);
             $('#name').val(perfilUsuario.name);
             $('#email').val(perfilUsuario.email);
             $('#password').val(perfilUsuario.password);
-            $('#repass').val(perfilUsuario.password);
+            // $('#repass').val(perfilUsuario.password);
         },
         error: function(error){
             console.log(error);
@@ -36,13 +37,6 @@ $('#save').click(function(event){
     var email = $('#email').val();
     var password = $('#password').val();
     var repass = $('#repass').val();
-
-    // if(password != repass){
-    //     alert('Las contraseñas no coinciden');
-    //     event.preventDefault();
-    //     return;
-    // }
-    // Agregar validación de formulario
 
     $.ajax({
         url: server + "/usuario/"+id+"/actualizar",

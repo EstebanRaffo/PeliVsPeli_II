@@ -99,7 +99,27 @@ function obtenerUsuario(email, callback){
    })
 }
 
+function obtenerPerfil(req, res){
+    var id = req.body.id;
+    console.log(id)
+    var sql = `SELECT id, name, email, password, avatar FROM usuario WHERE id = ${id}`;
+
+    con.query(sql, function(error, resultado, fields){
+        if(error){
+            console.log("Hubo un error en la creación de usuario", error.message);
+            return res.status(404).send("Hubo un error en la creación de usuario");
+        }
+
+        // var response = {
+        //     'usuario': resultado[0]
+        // };
+        console.log(resultado[0])
+        res.json(resultado[0]);
+    }); 
+}
+
 module.exports = {
     nuevoUsuario,
-    login
+    login,
+    obtenerPerfil
 }

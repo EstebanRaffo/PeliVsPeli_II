@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/style-profile.css">
     <title>Perfil</title>
-    <!-- <script src="../js/jquery.js"></script> -->
 </head>
 <body>
     <header>
@@ -26,7 +25,7 @@
             <!-- left column -->
             <div class="col-md-3">
                 <div class="text-center">
-                    <img src="../avatar/iconfinder_male3_403019.png" width="80" height="80" class="avatar img-circle" alt="avatar">
+                    <img id="avatar" width="80" height="80" class="avatar img-circle" alt="avatar">
                     <h6>Upload a different photo...</h6>
                     <input type="file" class="form-control" name="avatar">
                 </div>
@@ -45,13 +44,13 @@
                     <div class="form-group">
                         <label for="firstname" class="col-lg-3 control-label">First name *</label>
                         <div class="col-lg-8">
-                            <input id="name" class="form-control" type="text" required>
+                            <input id="name" class="form-control" type="text" name="firstName" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="lastname" class="col-lg-3 control-label">Last name *</label>
                         <div class="col-lg-8">
-                            <input id="lastname" class="form-control" type="text" required>
+                            <input id="lastname" class="form-control" type="text" name="secondName" required>
                         </div>
                     </div>
                     <div class="form-group">
@@ -63,7 +62,7 @@
                     <div class="form-group">
                         <label for="email" class="col-lg-3 control-label">Email *</label>
                         <div class="col-lg-8">
-                            <input id="email" class="form-control" type="text" required>
+                            <input id="email" class="form-control" type="text" name="email" placeholder="usuario@mail.com" required>
                         </div>
                     </div>
                     <div class="form-group">
@@ -92,13 +91,13 @@
                     <div class="form-group">
                         <label for="password" class="col-md-3 control-label">Password *</label>
                         <div class="col-md-8">
-                            <input id="password" class="form-control" type="password" required>
+                            <input id="password" class="form-control" type="password" name="password" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="repass" class="col-md-5 control-label">Confirm password *</label>
                         <div class="col-md-8">
-                            <input id="repass" class="form-control" type="password" required>
+                            <input id="repass" class="form-control" type="password" name="password2" required>
                         </div>
                     </div>
                     <div class="form-group">
@@ -120,6 +119,11 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" data-auto-replace-svg="nest"></script>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.2/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.2/dist/additional-methods.min.js"></script>   -->
+
+    <!-- <script src="../js/validation.js"></script> -->
     <script src="../js/perfil.js"></script>
 
 </body>

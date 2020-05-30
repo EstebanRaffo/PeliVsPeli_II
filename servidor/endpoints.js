@@ -18,6 +18,7 @@ function agregarEndpoints(app){
     // Usuarios
     app.post('/usuario/crear', userController.nuevoUsuario);
     app.post('/login', userController.login);
+    app.get('/usuario/perfil', userController.obtenerPerfil);
 }
 
 module.exports = {
